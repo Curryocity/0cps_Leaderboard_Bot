@@ -452,8 +452,8 @@ class DeleteButton(View):
             if not(interaction.user.guild_permissions.administrator):
                 await interaction.response.send_message("What are you trying to do? :clown:")
                 return
-            custom_id = interaction.data["custom_id"]
             
+            custom_id = interaction.data["custom_id"]
             if custom_id == "Delete":
                 global leaderboard_dict
                 leaderboard_dict = load_json(leaderboard_path)
@@ -464,7 +464,6 @@ class DeleteButton(View):
                 save_json(leaderboard_path,leaderboard_dict)
                 save_json(obsolete_path,obsolete_dict)
                 await interaction.response.send_message("The run would be gone(for a really long time)")
-                
             elif custom_id == "Cancel":
                 await interaction.response.send_message("Gave bro a chance, but it hestitated :clown:")
             await interaction.message.edit(view = None)
