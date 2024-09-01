@@ -4,7 +4,7 @@ This is a bot specifically designed to use in a discord server [Project Zero](<h
 
 ## Credit
 
-This is not the first LB bot for Project Zero, the original creator of the bot - 8140 (or Vorizon on discord). It started that I had too much "suggestions" for the bot and 8140 kinda challenge me to make a better one myself. Ofc I wouldn't give up such great oppurtunity for learning purposes ~~and to secretly inject virus to everyone in the server~~. And thanks again to 8140 for helping me setting up the bot and code reference (I didn't copy most of them tho). 
+This is not the first LB bot for Project Zero, the original creator of the bot - 8140 (or Vorizon on discord). It started that I had too much "suggestions" for the bot and 8140 kinda challenge me to make a better one myself. Ofc I wouldn't give up such great oppurtunity for learning purposes ~~and to secretly inject virus to everyone in the server~~. And thanks again to 8140 for helping me setting up the bot and code reference (I didn't copy most of them tho).
 
 ## There's speedrun.com already?
 
