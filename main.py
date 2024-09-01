@@ -6,7 +6,7 @@ import cogs
 from cogs.lb import pending_path,submisson_channel_id
 from discord.ext import commands
 
-TOKEN = ""
+secret_path = "data/secret.json"
 
 bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 
@@ -116,8 +116,9 @@ async def load_extensions():
 
 async def main():
     async with bot:
+        TOKEN = cogs.lb.load_json(secret_path)["Token"]
         await load_extensions()
         await bot.start(TOKEN)
 
-
-asyncio.run(main())
+if __name__ == '__main__':
+    asyncio.run(main())

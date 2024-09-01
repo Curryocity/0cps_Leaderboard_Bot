@@ -9,3 +9,7 @@ This is not the first LB bot for Project Zero, the original creator of the bot -
 ## There's speedrun.com already?
 
 Yes, you're right. We had successfully request [speedrun.com board](<https://www.speedrun.com/0cps>) just for 0 CPS bridging. But it was still a fairly new community(not even 5 months ago as I'm typing these), so I'll put many experimental features into this bot and hopefully it'll be mature enough to bring changes to our SRC site. Also it is more convenient to use the bot in the discord chat and there will be more cool features other than leaderboard soon.
+
+## commands
+
+Work in progress, the bot wasn't added in the server, too. If you're wondering.
