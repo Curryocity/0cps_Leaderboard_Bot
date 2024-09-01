@@ -1,1 +1,5 @@
-I am tired now so later
+# 0cps Leaderboard bot
+This is a bot specifically designed to use in a discord server [Project Zero](<https://discord.gg/ywjy2Gx3>) (The biggest 0cps bridging server). The most remarkable feature is leaderboard system, a system that allow to submit runs to specific categories, which then send to verify/reject at the backend, and ofc display it in the leaderboard.
+
+## Credit
+This is not the first leaderboard bot for project zero, the original creator of the bot is one the server owner - 8140 (or Vorizon on discord). I had too much "suggestions" for the bot and 8140 kinda challenge me to make a better one myself. Ofc I wouldn't give up such great oppurtunity for learning ~~and to secretly inject virus to everyone in the server~~. Thanks 8140 for helping me setting up the bot and code reference (I didn't copy most of them tho). 
