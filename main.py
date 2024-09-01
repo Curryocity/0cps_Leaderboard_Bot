@@ -68,7 +68,6 @@ async def restartx(ctx):
 @bot.command()
 @commands.is_owner()
 async def quit(ctx):
-    
     await ctx.send("Good night ~~")
     pending_dict = cogs.lb.load_json(pending_path)
 
