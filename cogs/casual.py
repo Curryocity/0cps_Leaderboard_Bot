@@ -3,7 +3,6 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 from discord.ui import Button, View
-from discord.ui import Select
 
 class ButtonView(View):
     def __init__(self):
@@ -19,30 +18,6 @@ class ButtonView(View):
         self.button.callback = button_callback
 
         self.add_item(self.button)
-
-class SelectMenu(View):
-    @discord.ui.select(
-        placeholder= "What do you want to buy",
-        options = [discord.SelectOption(label="Hamburger",value= 0, description="triple cheese!"),
-                   discord.SelectOption(label="Pizza",value= 1, description="with pineapple"),
-                   discord.SelectOption(label="Poop",value= 2, description="Yumm, pure gold")
-                   ]
-    )
-
-    async def select_callback(self,interaction:discord.Interaction ,select: Select):
-        price = 0
-        name = ""
-        value = select.values[0]
-        if value == "0":
-            price = 520
-            name = "Hamburger"
-        if value == "1":
-            price = 314
-            name = "Pizza"
-        if value == "2":
-            price = 99999
-            name = "Poop"
-        await interaction.response.edit_message(content= f"You bought {name}, it is {price} dollars.")
 
 class ModalClass(discord.ui.Modal, title = "I wanted to know more about you"):
 
@@ -77,11 +52,6 @@ class casual(commands.Cog):
     async def click(self,ctx):
         view = ButtonView()
         await ctx.send("Here is your button:", view=view)
-
-    @commands.command()
-    async def buy(self,ctx):
-        view = SelectMenu()
-        await ctx.send("Here's the menu:", view = view)
 
     @commands.command()
     async def needfriend(self,ctx):
