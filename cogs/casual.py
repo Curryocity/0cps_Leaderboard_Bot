@@ -58,14 +58,14 @@ class casual(commands.Cog):
         view = ModalButton()
         await ctx.send("need someone to talk to you?",view = view)
 
-    @commands.command()
-    async def msg(self,ctx,user: discord.Member,message):
-        await user.send(message)
-        await ctx.send(f"successfully send to @{user}")
+#    @commands.command()
+#    async def msg(self,ctx,user: discord.Member,message):
+#        await user.send(message)
+#        await ctx.send(f"successfully send to @{user}")
 
-    @commands.command()
-    async def poop(self,ctx):
-        await ctx.send("I pooped here")
+#    @commands.command()
+#    async def poop(self,ctx):
+#        await ctx.send("I pooped here")
 
     @commands.command()
     async def hello(self,ctx):
