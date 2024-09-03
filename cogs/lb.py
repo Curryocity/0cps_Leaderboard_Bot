@@ -12,6 +12,7 @@ submisson_channel_id = 1277915107829223538
 pending_path = "data/pending.json"
 leaderboard_path = "data/leaderboard.json"
 obsolete_path = "data/obsolete.json"
+global_bot = None
 
 def load_json(path):
     if os.path.exists(path):
@@ -57,6 +58,8 @@ async def setup_hook(bot):
 class lb(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
+        global global_bot
+        global_bot = self.bot
 
     @commands.command()
     async def lb(self,ctx):
@@ -134,11 +137,7 @@ class lb(commands.Cog):
         save_json(pending_path,pending_dict)
         await ctx.send("Oops I might have cleared the entire pending.json lo/")
 
-    @commands.command()
-    @commands.is_owner()
-    async def traceback(self,ctx):
-        traceback.print_stack()
-        await ctx.send("printed traceback to console")
+    '''
 
     @commands.Cog.listener()
     async def on_interaction(self, interaction: discord.Interaction):
@@ -167,7 +166,6 @@ class lb(commands.Cog):
                     Button(label=name, style=discord.ButtonStyle.blurple, custom_id=f"_McPlayHD_{name.replace(' ','_')}+{tag}")
                     for name in names
                 ]
-                buttons.append(Button(label="<--", style=discord.ButtonStyle.red, custom_id=f"goBack+{tag}"))
                 view = View()
                 for button in buttons:
                     view.add_item(button)
@@ -185,7 +183,6 @@ class lb(commands.Cog):
                     Button(label=name, style=discord.ButtonStyle.blurple, custom_id=f"_BridgerLand_{name.replace(' ','_')}+{tag}")
                     for name in names
                 ]
-                buttons.append(Button(label="<--", style=discord.ButtonStyle.red, custom_id=f"goBack+{tag}"))
                 view = View()
                 for button in buttons:
                     view.add_item(button)
@@ -203,7 +200,6 @@ class lb(commands.Cog):
                     Button(label=name, style=discord.ButtonStyle.green, custom_id=f"_Distance_{name.replace(' ','_')}+{tag}")
                     for name in names
                 ]
-                buttons.append(Button(label="<--", style=discord.ButtonStyle.red, custom_id=f"goBack+{tag}"))
                 view = View()
                 for button in buttons:
                     view.add_item(button)
@@ -212,50 +208,103 @@ class lb(commands.Cog):
                 if tag == "submit":
                     content = f"[**Mode: Submit**] {content}"
                 await interaction.response.edit_message(content=content, view=view, embed=None)
+    '''
 
-            elif "goBack" in custom_id:
-                names = [
-                    "McPlayHD","BridgerLand","Distance"
-                ]
-                buttons = [
-                    Button(label=name, style=discord.ButtonStyle.blurple if name != "Distance" else discord.ButtonStyle.green,
-                            custom_id=f"{name.replace(' ','_')}+{tag}")
-                    for name in names
-                ]
-                view = View()
-                for button in buttons:
-                    view.add_item(button)
-                content = "Select a category:"
-                if tag == "submit":
-                    content = f"[**Mode: Submit**] {content}"
-                await interaction.response.edit_message(content=content, view=view, embed=None)
+class InitialButton(View):
+    def __init__(self, tag : str, selected = 0):
+        super().__init__(timeout=None)
 
-    def generatelb(self, category):
-        content = ""
-        tempLB = load_json(leaderboard_path).get(category, [])
-        if not tempLB:
-            content = f"There's no runs in **{category}** :sob:"
+        self.selected = selected
+        self.tag = tag
+        self.names = ["McPlayHD", "BridgerLand", "Distance"]
+
+        self.update_buttons()
+    
+    def update_buttons(self):
+        self.clear_items()
+
+        for i, name in enumerate(self.names):
+            button = Button(
+                label=name, 
+                style=discord.ButtonStyle.grey if (i + 1) != self.selected else discord.ButtonStyle.blurple,
+                custom_id=f"{name.replace(' ', '_')}+{self.tag}"
+            )
+            button.callback = self.button_callback
+            self.add_item(button)
+    
+    async def button_callback(self, interaction: discord.Interaction):
+
+        custom_id = interaction.data["custom_id"]
+        category, tag = custom_id.split('+')
+
+        if category == "McPlayHD":
+            self.selected = 1
+            content = "Select a sub-category for McPlayHD:"
+        elif category == "BridgerLand":
+            self.selected = 2
+            content = "Select a sub-category for BridgerLand:"
+        elif category == "Distance":
+            self.selected = 3
+            content = "Select a sub-category for Distance:"
+ 
+            
+        if tag == "submit":
+                content = f"[**Mode: Submit**] {content}"
+
+        self.update_buttons()
+
+        self.add_item(CategorySelect(category = category, tag = tag, content = content))
+
+        await interaction.response.edit_message(view=self, embed=None)
+
+class CategorySelect(Select):
+    def __init__(self, category, tag, content):
+        options_dict = {
+            "McPlayHD" : ["Extra Short", "Short", "Normal", "Long", "Inclined Short", "Inclined Normal"],
+            "BridgerLand" : ["Short", "Regular", "Inclined"],
+            "Distance" : ["Cha Cha", "HGB", "Dao Telly", "Hold Diag Fruit"]
+        }
+        options = [discord.SelectOption(label=option) for option in options_dict[category]]
+        super().__init__(placeholder = content, options = options) # value is the label name by default
+        self.category = category
+        self.tag = tag
+
+    async def callback(self, interaction: discord.Interaction):
+        self.category = f"{self.category}_{self.values[0]}"
+        if self.tag == "submit":
+                    modal = SubmitGUI(category= self.category, submitter_id= interaction.user.id)
+                    await interaction.response.send_modal(modal)
+        elif self.tag == "lb":
+            content = generatelb(category = self.category)
+            await interaction.response.edit_message(content = content)
+
+def generatelb(category):
+    content = ""
+    tempLB = load_json(leaderboard_path).get(category, [])
+    if not tempLB:
+        content = f"There's no runs in **{category}** :sob:"
+    else:
+        tellyless_exist = False
+        content = f"The Leaderboard for **{category}**: \n"
+        if "Distance" in category:
+            for i, run in enumerate(tempLB):
+                content += f"{i+1}. {run['Runner name']}:  [{run['Distance']}b](<{run['Link']}>)\n"
         else:
-            tellyless_exist = False
-            content = f"The Leaderboard for **{category}**: \n"
-            if "Distance" in category:
-                for i, run in enumerate(tempLB):
-                    content += f"{i+1}. {run['Runner name']}:  [{run['Distance']}b](<{run['Link']}>)\n"
-            else:
-                for i, run in enumerate(tempLB):
-                    if run["Telly?"] is False:
-                        content += f"{i+1}. :sloth: {run['Runner name']}:  [{run['Time']}s](<{run['Link']}>)\n"
-                        tellyless_exist = True
-                    else:
-                        content += f"{i+1}. {run['Runner name']}:  [{run['Time']}s](<{run['Link']}>)\n"
-            if tellyless_exist: content += ("(:sloth: --> the run is performed ***tellyless***)")
+            for i, run in enumerate(tempLB):
+                if run["Telly?"] is False:
+                    content += f"{i+1}. :sloth: {run['Runner name']}:  [{run['Time']}s](<{run['Link']}>)\n"
+                    tellyless_exist = True
+                else:
+                    content += f"{i+1}. {run['Runner name']}:  [{run['Time']}s](<{run['Link']}>)\n"
+        if tellyless_exist: content += ("(:sloth: --> the run is performed ***tellyless***)")
 
-        return content
+    return content
 
 class SubmitGUI(Modal, title = "Submit your run"):
-    def __init__(self, bot, category, submitter_id, *args, **kwargs):
+    def __init__(self, category, submitter_id, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.bot = bot
+        global global_bot
+        self.bot = global_bot
         self.category = category
         self.submitter_id = submitter_id
         self.submitter_name = None
@@ -432,26 +481,11 @@ class RejectionGUI(Modal):
             pending_dict.append(self.submission)
             await interaction.response.send_message(f"Error msg: {e}\nPlease try again, it should be working fine. Hope it is Discord's issue", ephemeral=True)
 
-class InitialButton(View):
-    def __init__(self, tag : str, selected = 0):
-        super().__init__(timeout=None)
-        
-        names = [
-            "McPlayHD","BridgerLand","Distance"
-        ]
-        buttons = [
-            Button(label=name, style=discord.ButtonStyle.blurple if name != "Distance" else discord.ButtonStyle.green,
-                    custom_id=f"{name.replace(' ','_')}+{tag}")
-            for name in names
-        ]
-        for button in buttons:
-            self.add_item(button)
-
 class DeleteButton(View):
     def __init__(self, category, index):
         super().__init__()
         buttons = [Button(label="Delete", style=discord.ButtonStyle.red, custom_id="Delete"),
-                         Button(label="Cancel", style=discord.ButtonStyle.gray, custom_id="Cancel")]
+                    Button(label="Cancel", style=discord.ButtonStyle.gray, custom_id="Cancel")]
 
         async def button_callback(interaction: discord.Interaction):
             if not(interaction.user.guild_permissions.administrator):
