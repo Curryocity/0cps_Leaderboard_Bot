@@ -137,79 +137,6 @@ class lb(commands.Cog):
         save_json(pending_path,pending_dict)
         await ctx.send("Oops I might have cleared the entire pending.json lo/")
 
-    '''
-
-    @commands.Cog.listener()
-    async def on_interaction(self, interaction: discord.Interaction):
-
-        if interaction.type == discord.InteractionType.component:
-            custom_id = interaction.data["custom_id"]
-            tag = custom_id.split('+')[-1]
-
-            if custom_id.startswith("_"):
-
-                category = ((custom_id.lstrip("_")).removesuffix(f"+{tag}")).replace("_"," ")
-
-                if tag == "submit":
-                    modal = SubmitGUI(category= category, submitter_id= interaction.user.id, bot= self.bot)
-                    await interaction.response.send_modal(modal)
-                elif tag == "lb":
-                    content = self.generatelb(category = category)
-                    await interaction.response.edit_message(content = content)
-                    
-            elif "McPlayHD" in custom_id:
-                names = [
-                    "Extra Short", "Short", "Normal", "Long", 
-                    "Inclined Short", "Inclined Normal"
-                ]
-                buttons = [
-                    Button(label=name, style=discord.ButtonStyle.blurple, custom_id=f"_McPlayHD_{name.replace(' ','_')}+{tag}")
-                    for name in names
-                ]
-                view = View()
-                for button in buttons:
-                    view.add_item(button)
-
-                content = "Select a sub-category for McPlayHD:"
-                if tag == "submit":
-                    content = f"[**Mode: Submit**] {content}"
-                await interaction.response.edit_message(content=content, view=view, embed=None)
-        
-            elif "BridgerLand" in custom_id:
-                names = [
-                    "Short","Regular","Inclined"
-                ]
-                buttons = [
-                    Button(label=name, style=discord.ButtonStyle.blurple, custom_id=f"_BridgerLand_{name.replace(' ','_')}+{tag}")
-                    for name in names
-                ]
-                view = View()
-                for button in buttons:
-                    view.add_item(button)
-                
-                content = "Select a sub-category for BridgerLand:"
-                if tag == "submit":
-                    content = f"[**Mode: Submit**] {content}"
-                await interaction.response.edit_message(content=content, view=view, embed=None)
-
-            elif "Distance" in custom_id:
-                names = [
-                    "Cha Cha","HGB","Dao Telly","Hold Diag Fruit"
-                ]
-                buttons = [
-                    Button(label=name, style=discord.ButtonStyle.green, custom_id=f"_Distance_{name.replace(' ','_')}+{tag}")
-                    for name in names
-                ]
-                view = View()
-                for button in buttons:
-                    view.add_item(button)
-                
-                content = "Select a sub-category for Distance:"
-                if tag == "submit":
-                    content = f"[**Mode: Submit**] {content}"
-                await interaction.response.edit_message(content=content, view=view, embed=None)
-    '''
-
 class InitialButton(View):
     def __init__(self, tag : str, selected = 0):
         super().__init__(timeout=None)
@@ -246,10 +173,6 @@ class InitialButton(View):
         elif category == "Distance":
             self.selected = 3
             content = "Select a sub-category for Distance:"
- 
-            
-        if tag == "submit":
-                content = f"[**Mode: Submit**] {content}"
 
         self.update_buttons()
 
