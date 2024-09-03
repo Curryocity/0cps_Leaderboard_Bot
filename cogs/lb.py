@@ -60,11 +60,11 @@ class lb(commands.Cog):
 
     @commands.command()
     async def lb(self,ctx):
-        await ctx.send("Select a category:", view = InitialButton(submitq=False))
+        await ctx.send("Select a category:", view = InitialButton(tag = "lb"))
 
     @commands.command()
     async def submit(self,ctx):
-        await ctx.send("[**Mode: Submit**] Select a category:", view = InitialButton(submitq=True))
+        await ctx.send("[**Mode: Submit**] Select a category:", view = InitialButton(tag = "submit"))
 
     @commands.command()
     @commands.is_owner()
@@ -145,35 +145,18 @@ class lb(commands.Cog):
 
         if interaction.type == discord.InteractionType.component:
             custom_id = interaction.data["custom_id"]
-            submitq = False
-            if "submit" in custom_id:   submitq = True
-            
+            tag = custom_id.split('+')[-1]
+
             if custom_id.startswith("_"):
 
-                category = ((custom_id.lstrip("_")).removesuffix("_submit")).replace("_"," ")
+                category = ((custom_id.lstrip("_")).removesuffix(f"+{tag}")).replace("_"," ")
 
-                if submitq:
+                if tag == "submit":
                     modal = SubmitGUI(category= category, submitter_id= interaction.user.id, bot= self.bot)
                     await interaction.response.send_modal(modal)
-                else:
-                    tempLB = load_json(leaderboard_path).get(category, [])
-                    if not tempLB:
-                        await interaction.response.edit_message(content = f"There's no runs in **{category}** :sob:")
-                    else:
-                        tellyless_exist = False
-                        content = f"The Leaderboard for **{category}**: \n"
-                        if "Distance" in category:
-                            for i, run in enumerate(tempLB):
-                                content += f"{i+1}. {run['Runner name']}:  [{run['Distance']}b](<{run['Link']}>)\n"
-                        else:
-                            for i, run in enumerate(tempLB):
-                                if run["Telly?"] is False:
-                                    content += f"{i+1}. :sloth: {run['Runner name']}:  [{run['Time']}s](<{run['Link']}>)\n"
-                                    tellyless_exist = True
-                                else:
-                                    content += f"{i+1}. {run['Runner name']}:  [{run['Time']}s](<{run['Link']}>)\n"
-                        if tellyless_exist: content += ("(:sloth: --> the run is performed ***tellyless***)")
-                        await interaction.response.edit_message(content = content)
+                elif tag == "lb":
+                    content = self.generatelb(category = category)
+                    await interaction.response.edit_message(content = content)
                     
             elif "McPlayHD" in custom_id:
                 names = [
@@ -181,16 +164,16 @@ class lb(commands.Cog):
                     "Inclined Short", "Inclined Normal"
                 ]
                 buttons = [
-                    Button(label=name, style=discord.ButtonStyle.blurple, custom_id=f"_McPlayHD_{name.replace(' ','_')}_submit" if submitq else f"_McPlayHD_{name.replace(' ','_')}")
+                    Button(label=name, style=discord.ButtonStyle.blurple, custom_id=f"_McPlayHD_{name.replace(' ','_')}+{tag}")
                     for name in names
                 ]
-                buttons.append(Button(label="<--", style=discord.ButtonStyle.red, custom_id="goBack_submit" if submitq else "goBack"))
+                buttons.append(Button(label="<--", style=discord.ButtonStyle.red, custom_id=f"goBack+{tag}"))
                 view = View()
                 for button in buttons:
                     view.add_item(button)
 
                 content = "Select a sub-category for McPlayHD:"
-                if submitq:
+                if tag == "submit":
                     content = f"[**Mode: Submit**] {content}"
                 await interaction.response.edit_message(content=content, view=view, embed=None)
         
@@ -199,16 +182,16 @@ class lb(commands.Cog):
                     "Short","Regular","Inclined"
                 ]
                 buttons = [
-                    Button(label=name, style=discord.ButtonStyle.blurple, custom_id=f"_BridgerLand_{name.replace(' ','_')}_submit" if submitq else f"_BridgerLand_{name.replace(' ','_')}")
+                    Button(label=name, style=discord.ButtonStyle.blurple, custom_id=f"_BridgerLand_{name.replace(' ','_')}+{tag}")
                     for name in names
                 ]
-                buttons.append(Button(label="<--", style=discord.ButtonStyle.red, custom_id="goBack_submit" if submitq else "goBack"))
+                buttons.append(Button(label="<--", style=discord.ButtonStyle.red, custom_id=f"goBack+{tag}"))
                 view = View()
                 for button in buttons:
                     view.add_item(button)
                 
                 content = "Select a sub-category for BridgerLand:"
-                if submitq:
+                if tag == "submit":
                     content = f"[**Mode: Submit**] {content}"
                 await interaction.response.edit_message(content=content, view=view, embed=None)
 
@@ -217,16 +200,16 @@ class lb(commands.Cog):
                     "Cha Cha","HGB","Dao Telly","Hold Diag Fruit"
                 ]
                 buttons = [
-                    Button(label=name, style=discord.ButtonStyle.green, custom_id=f"_Distance_{name.replace(' ','_')}_submit" if submitq else f"_Distance_{name.replace(' ','_')}")
+                    Button(label=name, style=discord.ButtonStyle.green, custom_id=f"_Distance_{name.replace(' ','_')}+{tag}")
                     for name in names
                 ]
-                buttons.append(Button(label="<--", style=discord.ButtonStyle.red, custom_id="goBack_submit" if submitq else "goBack"))
+                buttons.append(Button(label="<--", style=discord.ButtonStyle.red, custom_id=f"goBack+{tag}"))
                 view = View()
                 for button in buttons:
                     view.add_item(button)
                 
                 content = "Select a sub-category for Distance:"
-                if submitq:
+                if tag == "submit":
                     content = f"[**Mode: Submit**] {content}"
                 await interaction.response.edit_message(content=content, view=view, embed=None)
 
@@ -236,16 +219,38 @@ class lb(commands.Cog):
                 ]
                 buttons = [
                     Button(label=name, style=discord.ButtonStyle.blurple if name != "Distance" else discord.ButtonStyle.green,
-                            custom_id=f"{name.replace(' ','_')}_submit" if submitq else f"{name.replace(' ','_')}")
+                            custom_id=f"{name.replace(' ','_')}+{tag}")
                     for name in names
                 ]
                 view = View()
                 for button in buttons:
                     view.add_item(button)
                 content = "Select a category:"
-                if submitq:
+                if tag == "submit":
                     content = f"[**Mode: Submit**] {content}"
                 await interaction.response.edit_message(content=content, view=view, embed=None)
+
+    def generatelb(self, category):
+        content = ""
+        tempLB = load_json(leaderboard_path).get(category, [])
+        if not tempLB:
+            content = f"There's no runs in **{category}** :sob:"
+        else:
+            tellyless_exist = False
+            content = f"The Leaderboard for **{category}**: \n"
+            if "Distance" in category:
+                for i, run in enumerate(tempLB):
+                    content += f"{i+1}. {run['Runner name']}:  [{run['Distance']}b](<{run['Link']}>)\n"
+            else:
+                for i, run in enumerate(tempLB):
+                    if run["Telly?"] is False:
+                        content += f"{i+1}. :sloth: {run['Runner name']}:  [{run['Time']}s](<{run['Link']}>)\n"
+                        tellyless_exist = True
+                    else:
+                        content += f"{i+1}. {run['Runner name']}:  [{run['Time']}s](<{run['Link']}>)\n"
+            if tellyless_exist: content += ("(:sloth: --> the run is performed ***tellyless***)")
+
+        return content
 
 class SubmitGUI(Modal, title = "Submit your run"):
     def __init__(self, bot, category, submitter_id, *args, **kwargs):
@@ -428,7 +433,7 @@ class RejectionGUI(Modal):
             await interaction.response.send_message(f"Error msg: {e}\nPlease try again, it should be working fine. Hope it is Discord's issue", ephemeral=True)
 
 class InitialButton(View):
-    def __init__(self, submitq):
+    def __init__(self, tag : str, selected = 0):
         super().__init__(timeout=None)
         
         names = [
@@ -436,7 +441,7 @@ class InitialButton(View):
         ]
         buttons = [
             Button(label=name, style=discord.ButtonStyle.blurple if name != "Distance" else discord.ButtonStyle.green,
-                    custom_id=f"{name.replace(' ','_')}_submit" if submitq else f"{name.replace(' ','_')}")
+                    custom_id=f"{name.replace(' ','_')}+{tag}")
             for name in names
         ]
         for button in buttons:

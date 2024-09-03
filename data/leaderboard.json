@@ -1,1 +1,28 @@
-{}
+{
+    "McPlayHD Extra Short": [
+        {
+            "Runner name": "curryocity",
+            "Runner id": 859031824596074537,
+            "Time": 2.85,
+            "Telly?": true,
+            "Link": "https://turnk"
+        }
+    ],
+    "McPlayHD Normal": [
+        {
+            "Runner name": "curryocity",
+            "Runner id": 859031824596074537,
+            "Time": 10.9,
+            "Telly?": false,
+            "Link": "https://sdgga"
+        }
+    ],
+    "Distance HGB": [
+        {
+            "Runner name": "curryocity",
+            "Runner id": 859031824596074537,
+            "Distance": 1234,
+            "Link": "https://uhhh"
+        }
+    ]
+}
