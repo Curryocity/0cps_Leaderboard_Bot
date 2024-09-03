@@ -33,10 +33,10 @@ if pending_id is None:
     pending_id = 0
     pending_dict["counter"] = None
     save_json(pending_path, pending_dict)
-    print("Error: 'counter' in pending.json not defined, please fix it as soon as possible.")
+    print("Error: 'counter' in pending.json is missing, please fix it as soon as possible.")
 
 async def setup_hook(bot):
-    print("Setup_hook...",end = ' ')
+    print("Setup_hook...", end = ' ')
     try:
         pending_runs = load_json(pending_path)
         pending_runs.pop("counter")
