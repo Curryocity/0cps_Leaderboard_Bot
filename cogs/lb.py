@@ -2,7 +2,6 @@ import discord
 import json
 import os
 import re
-import traceback
 
 from discord.ext import commands
 from discord.ui import Button, View, Modal, TextInput
@@ -38,22 +37,21 @@ if pending_id is None:
 
 async def setup_hook(bot):
     print("Setup_hook...", end = ' ')
-    try:
-        pending_runs = load_json(pending_path)
-        pending_runs.pop("counter")
-        for i,pending_run in pending_runs.items():
-            
-            if "Distance" in pending_run["Category"]:
-                value = pending_run["Distance"]
-                tellyq = None
-            else:
-                value = pending_run["Time"]
-                tellyq = pending_run["Telly?"]
+    pending_runs = load_json(pending_path)
+    pending_runs.pop("counter")
 
-            await send_submission(bot = bot, run_id = i, value = value, tellyq = tellyq, newq = False)
-        print("Done")
-    except Exception as e:
-        print(e)
+    for i, pending_run in pending_runs.items():
+        
+        if "Distance" in pending_run["Category"]:
+            value = pending_run["Distance"]
+            tellyq = None
+        else:
+            value = pending_run["Time"]
+            tellyq = pending_run["Telly?"]
+
+        await send_submission(bot = bot, run_id = i, value = value, tellyq = tellyq, newq = False)
+    print("Done")
+
 
 class lb(commands.Cog):
     def __init__(self,bot):
@@ -67,7 +65,7 @@ class lb(commands.Cog):
 
     @commands.command()
     async def submit(self,ctx):
-        await ctx.send("[**Mode: Submit**] Select a category:", view = InitialButton(tag = "submit"))
+        await ctx.send("Select a category to submit ur run:", view = InitialButton(tag = "submit"))
 
     @commands.command()
     @commands.is_owner()
@@ -164,41 +162,44 @@ class InitialButton(View):
         custom_id = interaction.data["custom_id"]
         category, tag = custom_id.split('+')
 
+        if tag == "lb":
+            content = "Select a category:"
+        elif tag == "submit":
+            content = "Select a category to submit ur run:"
+
         if category == "McPlayHD":
             self.selected = 1
-            content = "Select a sub-category for McPlayHD:"
+            placeholder = "Select a sub-category for McPlayHD:"
         elif category == "BridgerLand":
             self.selected = 2
-            content = "Select a sub-category for BridgerLand:"
+            placeholder = "Select a sub-category for BridgerLand:"
         elif category == "Distance":
             self.selected = 3
-            content = "Select a sub-category for Distance:"
+            placeholder = "Select a sub-category for Distance:"
 
         self.update_buttons()
+        self.add_item(CategorySelect(category = category, tag = tag, placeholder = placeholder))
 
-        self.add_item(CategorySelect(category = category, tag = tag, content = content))
-
-        await interaction.response.edit_message(view=self, embed=None)
+        await interaction.response.edit_message(content = content, view = self, embed = None)
 
 class CategorySelect(Select):
-    def __init__(self, category, tag, content):
+    def __init__(self, category, tag, placeholder):
         options_dict = {
             "McPlayHD" : ["Extra Short", "Short", "Normal", "Long", "Inclined Short", "Inclined Normal"],
             "BridgerLand" : ["Short", "Regular", "Inclined"],
             "Distance" : ["Cha Cha", "HGB", "Dao Telly", "Hold Diag Fruit"]
         }
-        options = [discord.SelectOption(label=option) for option in options_dict[category]]
-        super().__init__(placeholder = content, options = options) # value is the label name by default
+        options = [discord.SelectOption(label = option) for option in options_dict[category]]
+        super().__init__(placeholder = placeholder, options = options) # value is the label name by default
         self.category = category
         self.tag = tag
 
     async def callback(self, interaction: discord.Interaction):
-        self.category = f"{self.category}_{self.values[0]}"
         if self.tag == "submit":
-                    modal = SubmitGUI(category= self.category, submitter_id= interaction.user.id)
+                    modal = SubmitGUI(category= f"{self.category} {self.values[0]}", submitter_id= interaction.user.id)
                     await interaction.response.send_modal(modal)
         elif self.tag == "lb":
-            content = generatelb(category = self.category)
+            content = generatelb(category = f"{self.category} {self.values[0]}")
             await interaction.response.edit_message(content = content)
 
 def generatelb(category):
@@ -208,17 +209,32 @@ def generatelb(category):
         content = f"There's no runs in **{category}** :sob:"
     else:
         tellyless_exist = False
+        rank = 1
+        prevalue = 0
         content = f"The Leaderboard for **{category}**: \n"
         if "Distance" in category:
+
             for i, run in enumerate(tempLB):
-                content += f"{i+1}. {run['Runner name']}:  [{run['Distance']}b](<{run['Link']}>)\n"
+
+                if run['Distance'] != prevalue:
+                    rank = i + 1
+
+                content += f"{rank})  {run['Runner name']}:  [{run['Distance']}b](<{run['Link']}>)\n"
+                prevalue = run['Distance']
         else:
             for i, run in enumerate(tempLB):
+
+                if run['Time'] != prevalue:
+                    rank = i + 1
+
                 if run["Telly?"] is False:
-                    content += f"{i+1}. :sloth: {run['Runner name']}:  [{run['Time']}s](<{run['Link']}>)\n"
+                    content += f"{rank})  :sloth: {run['Runner name']}:  [{run['Time']}s](<{run['Link']}>)\n"
                     tellyless_exist = True
                 else:
-                    content += f"{i+1}. {run['Runner name']}:  [{run['Time']}s](<{run['Link']}>)\n"
+                    content += f"{rank})  {run['Runner name']}:  [{run['Time']}s](<{run['Link']}>)\n"
+
+                prevalue = run['Time']
+
         if tellyless_exist: content += ("(:sloth: --> the run is performed ***tellyless***)")
 
     return content
