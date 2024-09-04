@@ -256,6 +256,7 @@ class SubmitGUI(Modal, title = "Submit your run"):
             self.add_item(TextInput(label="Time", placeholder="Unit: second(s)"))
             if not("Inclined" in self.category):
                 self.add_item(TextInput(label="Sprint restriction?", placeholder="'0' if telly%, '1' if tellyless%"))
+
         self.add_item(TextInput(label= "Video Link", placeholder="Paste a permanent & direct link"))
         self.add_item(TextInput(label = "Runner id", placeholder="Leave it blank if you're the runner", required= False))
 
@@ -277,17 +278,16 @@ class SubmitGUI(Modal, title = "Submit your run"):
             
         link = self.children[-2].value
         if not(is_link(link)):
-            await interaction.response.send_message(f"(Probably) invalid link")
+            await interaction.response.send_message(f"Invalid link, you failed the world's most lenient link test :thumbsup:")
             return
         
         if self.children[-1].value != "":
-            try:
-                self.runner_id = self.children[-1].value
-                self.runner_name = await get_user_name(self.bot, self.runner_id)
-            except Exception as e:
+            self.runner_id = self.children[-1].value
+            self.runner_name = await get_user_name(self.bot, self.runner_id)
+            if self.runner_name is None:
                 await interaction.response.send_message(f"I cun't fetch runner id, plz chuck if the id were valid.")
                 return
-        try:
+        try: # when you're too bored:
             value = float(value)
             if value <= 0:
                 raise ValueError
@@ -301,7 +301,7 @@ class SubmitGUI(Modal, title = "Submit your run"):
                 if abs(value/0.05-round(value/0.05)) < 0.0000001 :
                     pending_dict[pending_id] = {"Runner name":self.runner_name,"Runner id":self.runner_id,"Category":self.category,"Time": value,"Telly?":tellyq,"Link":link,"Submitter name": self.submitter_name,"Submitter id":self.submitter_id} 
                 else:
-                    await interaction.response.send_message(f"Minecraft runs on tick(0.05s) dummy, do you think {value}s is reasonable?")
+                    await interaction.response.send_message(f"Minecraft runs on tick(0.05s) dummy. You -> {value}s :skull:")
                     return
             
             save_json(pending_path,pending_dict)
@@ -400,7 +400,6 @@ class RejectionGUI(Modal):
         self.run_id = run_id
         self.bot = bot
         self.add_item(TextInput(label="Reason", placeholder="Why do you reject the run?"))
-        
 
     async def on_submit(self, interaction: discord.Interaction):
         reason = self.children[0].value
@@ -477,7 +476,7 @@ class DeleteButton(View):
                                 return
                         leaderboard_dict[category].append(sub_run)
                         return
-            print("no substitution run")
+            print("Random log: No runs for substitution")
 
 async def dm_user(bot, user_id, message):
     try:

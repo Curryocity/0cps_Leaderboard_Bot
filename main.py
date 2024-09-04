@@ -21,7 +21,7 @@ async def on_ready():
 
 @bot.command() 
 @commands.is_owner()
-async def sync(ctx):
+async def sync(ctx): # oh yea let me sync the one and only one slash command
     synced = await bot.tree.sync()
     await ctx.send(f"Synced {len(synced)} slash command(s).")
 
@@ -68,7 +68,7 @@ async def restartx(ctx):
 @bot.command()
 @commands.is_owner()
 async def quit(ctx):
-    await ctx.send("Good night ~~")
+    await ctx.send("Good night ~~")  # but what if it was morning
     pending_dict = cogs.lb.load_json(pending_path)
 
     channel = bot.get_channel(submisson_channel_id)
