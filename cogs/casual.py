@@ -44,9 +44,7 @@ class casual(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
 
-    @app_commands.command(name = "intro", description = "Introducution of this bot")
-    async def intro(self,interaction: discord.Interaction):
-        await interaction.response.send_message("Hi, I am a bot designed to be the leaderboard manager of 0cps bridging community! \nStill work in progress :heart: ")
+
 
     @commands.command()
     async def click(self,ctx):
@@ -58,25 +56,15 @@ class casual(commands.Cog):
         view = ModalButton()
         await ctx.send("need someone to talk to you?",view = view)
 
-#    @commands.command()
-#    async def msg(self,ctx,user: discord.Member,message):
-#        await user.send(message)
-#        await ctx.send(f"successfully send to @{user}")
-
-#    @commands.command()
-#    async def poop(self,ctx):
-#        await ctx.send("I pooped here")
+    @commands.command()
+    async def poop(self,ctx):
+        await ctx.send("I pooped here")
 
     @commands.command()
     async def hello(self,ctx):
         await ctx.send("shut the fuck up no one cares about you")
 
-    @commands.Cog.listener()
-    async def on_message(self,message):
-        if message.author == self.bot.user:
-            return
-        if message.content == "fuck you":
-            await message.channel.send("Bro you did that last night 💀 ")
+
 
 async def setup(bot):
     await bot.add_cog(casual(bot))
