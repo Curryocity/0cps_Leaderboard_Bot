@@ -48,7 +48,7 @@ class casual(commands.Cog):
     @commands.command()
     async def click(self,ctx):
         view = ButtonView()
-        await ctx.send("Here is your button:", view=view)
+        await ctx.send("here is your button:", view=view)
 
     @commands.command()
     async def needfriend(self,ctx):
@@ -56,8 +56,8 @@ class casual(commands.Cog):
         await ctx.send("need someone to talk to you?",view = view)
 
     @commands.command()
-    async def poop(self,ctx):
-        await ctx.send("I pooped here")
+    async def cookie(self,ctx):
+        await ctx.send("wtf that's my cookie!\ngo away!")
 
     @commands.command()
     async def dice(self,ctx):
@@ -100,7 +100,14 @@ class casual(commands.Cog):
             "Q: How did police catch the thief who robbed an Apple store?\nA: There was an iWitness.",
             "I'm obsessed with telling airport jokes. My doctor says it's a terminal problem.",
             "I was going to tell you a joke about sodium, but then I thought, 'Na.'",
-            "Did you hear about the gardener who was excited for spring? She wet her plants."
+            "Did you hear about the gardener who was excited for spring? She wet her plants.",
+            "Q: What did the triangle say to the circle?\nA: You’re pointless.",
+            "RIP, boiling water. You will be mist.",
+            "Time flies like an arrow. Fruit flies like a banana.",
+            "I ordered a chicken and an egg online. I’ll let you know what comes first.",
+            "Q: What did one toilet say to another?\nA: You look flushed.",
+            "Q: What does a baby computer call his father?\nA: Data!",
+            "Q: What kind of tea is hard to swallow?\nA: Realitea!"
         ]
         j = random.choice(jokes)
         await ctx.send(j)

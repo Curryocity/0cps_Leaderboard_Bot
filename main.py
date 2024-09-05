@@ -8,7 +8,7 @@ from discord.ext import commands
 
 secret_path = "data/secret.json"
 
-bot = commands.Bot(command_prefix="!", intents=discord.Intents.all())
+bot = commands.Bot(command_prefix="!", intents=discord.Intents.all(), help_command = None)
 
 @bot.event
 async def on_ready():
