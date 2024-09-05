@@ -77,6 +77,14 @@ class easter_egg(commands.Cog):
         await ctx.send("do I look like a chatgpt? :middle_finger:")
 
     @commands.command()
+    async def todo(self,ctx):
+        await ctx.send("to do list for Curryocity:\n"+
+                       "- embed message\n"+
+                       "- readme.md\n"+
+                       "- more server commands\n"
+                       )
+
+    @commands.command()
     async def mute(self,ctx):
         duration = datetime.timedelta(seconds=60)
         try:

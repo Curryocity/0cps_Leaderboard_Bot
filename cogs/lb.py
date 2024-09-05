@@ -68,7 +68,7 @@ class lb(commands.Cog):
         await ctx.send("Select a category to submit ur run:", view = InitialButton(tag = "submit"))
 
     @commands.command()
-    @commands.is_owner()
+    @commands.has_any_role('Admin','admin','Moderator','moderator')
     async def delete(self, ctx, param = "", runner_id = None):
         if param == "":
             await ctx.send("## Need Help? \n ## Syntax: !delete <category tag> <runner_id>\n"+

@@ -24,7 +24,7 @@ class server(commands.Cog):
     
     @commands.command(aliases=['commands'])
     async def command(self,ctx):
-        await ctx.send("## list of commands (available for all members):\n"+
+        await ctx.send("## list of commands:\n"+
                        "**Server commands:**\n"+
                        "- help\n"+
                        "- command(s)\n"+
@@ -33,6 +33,7 @@ class server(commands.Cog):
                        "**Leaderboard commands:**\n"+
                        "- lb\n"+
                        "- submit\n"+
+                       "- delete (Moderator or Admin only)\n"+
                        "**Chat commands:** \n"+
                        "- click\n"+
                        "- cookie\n"+
