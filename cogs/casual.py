@@ -65,12 +65,8 @@ class casual(commands.Cog):
         await ctx.send(f"u got {num}")
 
     @commands.command()
-    async def why(self,ctx):
-        r = random.randint(0,1)
-        if r == 0:
-            await ctx.send("why not?")
-        else:
-            await ctx.send("because yes")
+    async def music(self,ctx):
+        await ctx.send("Absolutely recommend this banger :fire: : [https//www.youtube.com/watch?v=ZHFgk8Eo0FE](<https://www.youtube.com/watch?v=dQw4w9WgXcQ>)")
 
     @commands.command()
     async def joke(self,ctx):

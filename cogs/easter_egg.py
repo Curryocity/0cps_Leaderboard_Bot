@@ -1,3 +1,4 @@
+import datetime
 import discord
 import random
 
@@ -51,6 +52,40 @@ class easter_egg(commands.Cog):
     async def poop(self,ctx):
         await ctx.send("I pooped here")
 
+    @commands.command()
+    async def update(self,ctx):
+        await ctx.send("update your retarded brain first")
+
+    @commands.command()
+    async def mirror(self,ctx):
+        await ctx.send("poor mirror, it breaks instantly everytime when light from it reflects on you")
+
+    @commands.command()
+    async def why(self,ctx):
+        r = random.randint(0,1)
+        if r == 0:
+            await ctx.send("why not?")
+        else:
+            await ctx.send("because yes")       
+
+    @commands.command()
+    async def idea(self,ctx):
+        await ctx.send("such as removing you from the server")
+
+    @commands.command()
+    async def chatgpt(self,ctx):
+        await ctx.send("do I look like a chatgpt? :middle_finger:")
+
+    @commands.command()
+    async def mute(self,ctx):
+        duration = datetime.timedelta(seconds=60)
+        try:
+            user = ctx.message.author
+            await user.timeout(duration, reason = "funny")
+        except Exception as e:
+            print(e)
+        await ctx.send("Sure, I'll mute you.")
+
     @commands.Cog.listener()
     async def on_message(self,message):
         if message.author == self.bot.user:
@@ -59,6 +94,8 @@ class easter_egg(commands.Cog):
             await message.channel.send("Bro you did that last night :skull: ")
         if message.content == "same" or message.content == "Same":
             await message.channel.send("same")
+        if "nigger" in message.content.lower():
+            await message.channel.send(f"N word detected, <@{message.author.id}> wert a shame!")
 
 async def setup(bot):
     await bot.add_cog(easter_egg(bot))
