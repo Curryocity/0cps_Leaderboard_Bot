@@ -57,10 +57,6 @@ class easter_egg(commands.Cog):
         await ctx.send("update your retarded brain first")
 
     @commands.command()
-    async def mirror(self,ctx):
-        await ctx.send("poor mirror, it breaks instantly everytime when light from it reflects on you")
-
-    @commands.command()
     async def why(self,ctx):
         r = random.randint(0,1)
         if r == 0:
