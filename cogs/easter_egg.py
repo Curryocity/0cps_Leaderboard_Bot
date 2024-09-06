@@ -46,7 +46,6 @@ class easter_egg(commands.Cog):
                         "- haka jitter 0 cps\n"+
                         "- Haka bridge(honestly fine lol)\n"+
                         "- Hakawalk")
-    
 
     @commands.command()
     async def poop(self,ctx):
@@ -75,7 +74,6 @@ class easter_egg(commands.Cog):
     @commands.command()
     async def todo(self,ctx):
         await ctx.send("to do list for Curryocity:\n"+
-                       "- embed message\n"+
                        "- readme.md\n"+
                        "- more server commands\n"
                        )

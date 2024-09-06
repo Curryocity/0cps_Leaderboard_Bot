@@ -335,14 +335,16 @@ class VerificationView(View):
             save_json(pending_path , pending_dict)
             save_json(leaderboard_path, leaderboard_dict)
             save_json(obsolete_path, obsolete_dict)
-            await interaction.response.send_message(f'The run for {submission["Runner name"]} in category **{submission["Category"]}** has been verified and added to the leaderboard.', ephemeral=True)
             
             await dm_user(self.bot, submission["Runner id"], f"Your submission for the category **{submission['Category']}** has been verified and added to the leaderboard.")
             channel = self.bot.get_channel(submisson_channel_id)
             
             if channel:
                 message = await channel.fetch_message(submission["Message id"])
-                await message.edit(content= message.content.replace("**Pending** :thinking:", "**Verified** :white_check_mark:"), view=None)
+                embed = message.embeds[0]  
+                new_description = embed.description.replace("**Pending** :thinking:", "**Verified** :white_check_mark:")
+                embed.description = new_description
+                await message.edit(embed=embed, view=None)
         else:
             await interaction.response.send_message('The submission could not be found.', ephemeral=True)
 
@@ -416,11 +418,15 @@ class RejectionGUI(Modal):
                 channel = self.bot.get_channel(submisson_channel_id)
                 if channel:
                     message = await channel.fetch_message(self.submission["Message id"])
-                    await message.edit(content=message.content.replace("**Pending** :thinking:", f"**Rejected** :x:\n**Reason: {reason}**"), view=None)
+                    embed = message.embeds[0]  
+                    new_description = embed.description.replace("**Pending** :thinking:", f"**Rejected** :x:\n**Reason: {reason}**")
+                    embed.description = new_description
+                    await message.edit(embed=embed, view=None)
                 save_json(pending_path, pending_dict)
             else:
                 print(f"submission {self.run_id} not found")
-            await interaction.response.send_message('The submission has been rejected and the runner has been notified.', ephemeral=True)
+            await interaction.response.defer()
+            
         except Exception as e:
             pending_dict.append(self.submission)
             await interaction.response.send_message(f"Error msg: {e}\nPlease try again, it should be working fine. Hope it is Discord's issue", ephemeral=True)
@@ -512,16 +518,16 @@ async def send_submission(bot, run_id, value, tellyq, newq = True):
 
     if channel:
         view = VerificationView(run_id = run_id, bot = bot)
-        content = ("--------------------------\n"
-                +f"Submission ID: {run_id}\n"
-                +f"Submission by: <@{pending_run['Submitter id']}>\n"
+        content = (
+                 f"Submission by: <@{pending_run['Submitter id']}>\n"
                 +f"Category: **{pending_run['Category']}**\n"
                 +f"Runner: <@{pending_run['Runner id']}>\n"
-                +f"Time (Or distance): {value}\n"
-                +f"Video: {pending_run['Link']}\n"
-                +f"Telly? (Straight speedrun only): {tellyq}\n"
+                +f"Time (Or distance): **{value}**\n"
+                +f"Video: **{pending_run['Link']}**\n"
+                +f"Telly? (Straight speedrun only): **{tellyq}**\n"
                 +f"Status: **Pending** :thinking:")
-        message = await channel.send(content, view=view)
+        embed = Embed(title = f"Submission ID: {run_id}", description = content, color = 0xa800e6 )
+        message = await channel.send(content = "", embed = embed, view=view)
         pending_dict[run_id]["Message id"] = message.id
         if newq:
             global pending_id
