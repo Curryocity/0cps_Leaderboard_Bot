@@ -4,8 +4,8 @@ import os
 import re
 
 from discord.ext import commands
-from discord.ui import Button, View, Modal, TextInput
-from discord.ui import Select
+from discord.ui import Button, View, Modal, TextInput, Select
+from discord import Embed
 
 submisson_channel_id = 1277915107829223538
 pending_path = "data/pending.json"
@@ -199,19 +199,25 @@ class CategorySelect(Select):
                     modal = SubmitGUI(category= f"{self.category} {self.values[0]}", submitter_id= interaction.user.id)
                     await interaction.response.send_modal(modal)
         elif self.tag == "lb":
-            content = generatelb(category = f"{self.category} {self.values[0]}")
-            await interaction.response.edit_message(content = content)
+            title, content = generatelb(category = f"{self.category} {self.values[0]}")
+            if title is None:
+                await interaction.response.edit_message(content = content, embed = None)
+            else:
+                embed = Embed(title = title, description = content, color = 0xa800e6)
+                await interaction.response.edit_message(content = "",embed = embed)
 
 def generatelb(category):
     content = ""
     tempLB = load_json(leaderboard_path).get(category, [])
     if not tempLB:
+        title = None
         content = f"There's no runs in **{category}** :sob:"
     else:
         tellyless_exist = False
         rank = 1
         prevalue = 0
-        content = f"The Leaderboard for **{category}**: \n"
+        title = f"Leaderboard - **{category}**"
+        content = ""
         if "Distance" in category:
 
             for i, run in enumerate(tempLB):
@@ -219,7 +225,7 @@ def generatelb(category):
                 if run['Distance'] != prevalue:
                     rank = i + 1
 
-                content += f"{rank})  {run['Runner name']}:  [{run['Distance']}b](<{run['Link']}>)\n"
+                content += f"- **{rank}.**  <@{run['Runner id']}>  **[{run['Distance']}b](<{run['Link']}>)**\n"
                 prevalue = run['Distance']
         else:
             for i, run in enumerate(tempLB):
@@ -228,16 +234,16 @@ def generatelb(category):
                     rank = i + 1
 
                 if run["Telly?"] is False:
-                    content += f"{rank})  :sloth: {run['Runner name']}:  [{run['Time']}s](<{run['Link']}>)\n"
+                    content += f"- **{rank}.**  :sloth: <@{run['Runner id']}>   **[{run['Time']}s](<{run['Link']}>)**\n"
                     tellyless_exist = True
                 else:
-                    content += f"{rank})  {run['Runner name']}:  [{run['Time']}s](<{run['Link']}>)\n"
+                    content += f"- **{rank}.**  <@{run['Runner id']}>   **[{run['Time']}s](<{run['Link']}>)**\n"
 
                 prevalue = run['Time']
-
+        content +=  ("\u00a0" * 111) + "\n" 
         if tellyless_exist: content += ("(:sloth: --> the run is performed ***tellyless***)")
 
-    return content
+    return title, content
 
 class SubmitGUI(Modal, title = "Submit your run"):
     def __init__(self, category, submitter_id, *args, **kwargs):
@@ -506,15 +512,16 @@ async def send_submission(bot, run_id, value, tellyq, newq = True):
 
     if channel:
         view = VerificationView(run_id = run_id, bot = bot)
-        message = await channel.send( "--------------------------\n"
-                                    +f"Submission ID: {run_id}\n"
-                                    +f"Submission by: <@{pending_run['Submitter id']}>\n"
-                                    +f"Category: **{pending_run['Category']}**\n "
-                                    +f"Runner: <@{pending_run['Runner id']}>\n"
-                                    +f"Time (Or distance): {value}\n"
-                                    +f"Video: {pending_run['Link']}\n"
-                                    +f"Telly? (Straight speedrun only): {tellyq}\n"
-                                    +f"Status: **Pending** :thinking:", view=view)
+        content = ("--------------------------\n"
+                +f"Submission ID: {run_id}\n"
+                +f"Submission by: <@{pending_run['Submitter id']}>\n"
+                +f"Category: **{pending_run['Category']}**\n"
+                +f"Runner: <@{pending_run['Runner id']}>\n"
+                +f"Time (Or distance): {value}\n"
+                +f"Video: {pending_run['Link']}\n"
+                +f"Telly? (Straight speedrun only): {tellyq}\n"
+                +f"Status: **Pending** :thinking:")
+        message = await channel.send(content, view=view)
         pending_dict[run_id]["Message id"] = message.id
         if newq:
             global pending_id
