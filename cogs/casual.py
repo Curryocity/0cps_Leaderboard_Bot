@@ -47,7 +47,7 @@ class casual(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def say(ctx, *, message: str):
+    async def say(self, ctx, *, message: str):
         await ctx.message.delete()
         await ctx.send(message)
 
