@@ -19,24 +19,6 @@ async def on_ready():
     print("---------------------------")
     await cogs.lb.setup_hook(bot = bot)
 
-@bot.command() 
-@commands.is_owner()
-async def sync(ctx): # oh yea let me sync the one and only one slash command
-    synced = await bot.tree.sync()
-    await ctx.send(f"Synced {len(synced)} slash command(s).")
-
-@bot.command()
-@commands.is_owner()
-async def load(ctx, extension):
-    await bot.load_extension(f"cogs.{extension}")
-    await ctx.send(f"Loaded {extension} done.")
-
-@bot.command()
-@commands.is_owner()
-async def unload(ctx, extension):
-    await bot.unload_extension(f"cogs.{extension}")
-    await ctx.send(f"UnLoaded {extension} done.")
-
 @bot.command()
 @commands.is_owner()
 async def reload(ctx, extension):
