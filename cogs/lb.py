@@ -318,10 +318,19 @@ class VerificationView(View):
         super().__init__(timeout = None)
         self.run_id = run_id
         self.bot = bot
-        
+        self.required_roles = ['Admin', 'admin', 'Moderator', 'moderator']
+    
+
+
     @discord.ui.button(label="Verify", style=discord.ButtonStyle.green, custom_id='persistent_view:green')
     async def verify(self, interaction: discord.Interaction, button: discord.ui.Button):
 
+        
+        
+        if not(any(role.name in self.required_roles for role in interaction.user.roles)):
+            await interaction.response.send_message("What are you trying to do? :clown:", ephemeral=True)
+            return
+        
         submission = pending_dict.pop(self.run_id, None)
         if submission:
             self.insertLB(submission["Category"], submission)
@@ -343,6 +352,10 @@ class VerificationView(View):
 
     @discord.ui.button(label="Reject", style=discord.ButtonStyle.red, custom_id='persistent_view:red')
     async def reject(self, interaction: discord.Interaction, button: discord.ui.Button):
+        if not(any(role.name in self.required_roles for role in interaction.user.roles)):
+            await interaction.response.send_message("What are you trying to do? :clown:", ephemeral=True)
+            return
+        
         await interaction.response.send_modal(RejectionGUI(run_id = self.run_id, bot = self.bot))
 
     def insertLB(self, category, submission, obsoleteq = False):
