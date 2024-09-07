@@ -178,9 +178,9 @@ class InitialButton(View):
 class CategorySelect(Select):
     def __init__(self, category, tag, placeholder):
         options_dict = {
-            "McPlayHD" : ["Extra Short", "Short", "Normal", "Long", "Inclined Short", "Inclined Normal"],
+            "McPlayHD" : ["Extra Short", "Short", "Normal", "Long", "Inclined Short", "Inclined Normal", "Onestack"],
             "BridgerLand" : ["Short", "Regular", "Inclined"],
-            "Distance" : ["Cha Cha", "HGB", "Dao Telly", "Hold Diag Fruit"]
+            "Distance" : ["Cha Cha", "HGB", "Dao Telly", "Hold Diag Fruit", "Lightning", "Hold Haka"]
         }
         options = [discord.SelectOption(label = option) for option in options_dict[category]]
         super().__init__(placeholder = placeholder, options = options) # value is the label name by default
@@ -253,7 +253,7 @@ class SubmitGUI(Modal, title = "Submit your run"):
             self.add_item(TextInput(label="Distance", placeholder="Unit: block(s)"))
         else:
             self.add_item(TextInput(label="Time", placeholder="Unit: second(s)"))
-            if not("Inclined" in self.category):
+            if not("Inclined" in self.category) and not("Onestack" in self.category):
                 self.add_item(TextInput(label="Sprint restriction?", placeholder="'0' if telly%, '1' if tellyless%"))
 
         self.add_item(TextInput(label= "Video Link", placeholder="Paste a permanent & direct link"))
@@ -266,7 +266,7 @@ class SubmitGUI(Modal, title = "Submit your run"):
         value = self.children[0].value
 
         tellyq = None
-        if not(("Distance" in self.category) or ("Inclined" in self.category)):
+        if not(("Distance" in self.category) or ("Inclined" in self.category) or ("Onestack" in self.category)):
             if self.children[1].value == "0":
                 tellyq = True
             elif self.children[1].value == "1":
