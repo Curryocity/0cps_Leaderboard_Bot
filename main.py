@@ -21,13 +21,6 @@ async def on_ready():
 
 @bot.command()
 @commands.is_owner()
-async def say(ctx, *, message: str):
-    await ctx.message.delete()
-    await ctx.send(message)
-
-
-@bot.command()
-@commands.is_owner()
 async def restart(ctx, silient = False):
     if silient:
         print("Restarting myself...")

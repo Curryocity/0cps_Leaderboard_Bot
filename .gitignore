@@ -1,3 +1,6 @@
 __pycache__/
 data/secret.json
+data/leaderboard.json
+data/pending.json
+data/obsolete.json
 .DS_Store

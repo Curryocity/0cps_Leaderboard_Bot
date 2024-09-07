@@ -92,7 +92,7 @@ class lb(commands.Cog):
             tellyreq = ["m1","m2","m3","m4","b1","b2"]
             category_map = {"m1":"McPlayHD Extra Short", "m2":"McPlayHD Short", "m3":"McPlayHD Normal", "m4":"McPlayHD Long", "m5":"McPlayHD Inclined Short", "m6":"McPlayHD Inclined Normal", "m7":"McPlayHD Onestack",
                             "b1":"BridgerLand Short", "b2":"BridgerLand Regular", "b3":"BridgerLand Inclined",
-                            "d1":"Distance Cha Cha", "d2":"Distance HGB","d3":"Distance Dao Telly","d4":"Distance Hold Diag Fruit","d5":"Distance Lightning","d6":"Distance Kemytz Bridge","d7":"Distance Gain Cha Cha","d8":"Distance Hold Haka","d9":"Distance Hold Durx"}
+                            "d1":"Distance Cha Cha", "d2":"Distance HGB","d3":"Distance Dao Telly","d4":"Distance Hold Diag Fruit","d5":"Distance Lightning","d6":"Distance Kemytz Bridge","d7":"Distance Gain Cha Cha","d8":"Distance Hold Space Haka","d9":"Distance Hold Durx"}
             if param in category_map:
                 category = category_map[param]
                 confirm_msg = f"{category}"
@@ -180,7 +180,7 @@ class CategorySelect(Select):
         options_dict = {
             "McPlayHD" : ["Extra Short", "Short", "Normal", "Long", "Inclined Short", "Inclined Normal", "Onestack"],
             "BridgerLand" : ["Short", "Regular", "Inclined"],
-            "Distance" : ["Cha Cha", "HGB", "Dao Telly", "Hold Diag Fruit", "Lightning", "Kemytz Bridge", "Gain Cha Cha", "Hold Haka", "Hold Durx"]
+            "Distance" : ["Cha Cha", "HGB", "Dao Telly", "Hold Diag Fruit", "Lightning", "Kemytz Bridge", "Gain Cha Cha", "Hold Space Haka", "Hold Durx"]
         }
         options = [discord.SelectOption(label = option) for option in options_dict[category]]
         super().__init__(placeholder = placeholder, options = options) # value is the label name by default
@@ -325,12 +325,11 @@ class VerificationView(View):
     @discord.ui.button(label="Verify", style=discord.ButtonStyle.green, custom_id='persistent_view:green')
     async def verify(self, interaction: discord.Interaction, button: discord.ui.Button):
 
-        
-        
         if not(any(role.name in self.required_roles for role in interaction.user.roles)):
             await interaction.response.send_message("What are you trying to do? :clown:", ephemeral=True)
             return
         
+        await interaction.response.defer()
         submission = pending_dict.pop(self.run_id, None)
         if submission:
             self.insertLB(submission["Category"], submission)
