@@ -125,16 +125,6 @@ class lb(commands.Cog):
             else:
                 await ctx.send("Invalid category tag, !delete to check out the guide.")
 
-    @commands.command()
-    @commands.is_owner()
-    async def clear_pending(self,ctx):
-        global pending_dict
-        global pending_id
-        pending_id = 0
-        pending_dict = {"counter":pending_id}
-        save_json(pending_path,pending_dict)
-        await ctx.send("Oops I might have cleared the entire pending.json lo/")
-
 class InitialButton(View):
     def __init__(self, tag : str, selected = 0):
         super().__init__(timeout=None)
