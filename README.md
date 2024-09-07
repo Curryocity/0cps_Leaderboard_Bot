@@ -19,7 +19,7 @@ Yes, you're right. We had successfully request [speedrun.com board](<https://www
 
 ### - Speedrun
 
-- Cross the island for specified mode with 0 cps bridging, you are only allowed to click during clutch and pillar. 
+- Cross the island for specified mode with 0 cps bridging, you are only allowed to click during clutch and pillar.
 - Sprint restriction( *tellyless%* Category ): You are not allowed to sprint between the period of last contact of island and the last block of bridge place.
 
 ### - Distance
@@ -34,7 +34,7 @@ Yes, you're right. We had successfully request [speedrun.com board](<https://www
 
 ## Credit
 
-This isn't the first LB bot for Project Zero, 8140 (or Vorizon on discord) had made the first one. 
+This isn't the first LB bot for Project Zero, 8140 (or Vorizon on discord) had made the first one.
 
 It started that I had too much "suggestions" for the bot so 8140 challenges me to make a better one myself. Ofc I wouldn't give up such great oppurtunity to both learn and making my desire bot ~~and to secretly inject virus to everyone in the server~~(jkjkjkjkjk!!)
 
