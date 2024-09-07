@@ -7,7 +7,8 @@ from discord.ext import commands
 from discord.ui import Button, View, Modal, TextInput, Select
 from discord import Embed
 
-submisson_channel_id = 1277915107829223538
+
+secret_path = "data/secret.json"
 pending_path = "data/pending.json"
 leaderboard_path = "data/leaderboard.json"
 obsolete_path = "data/obsolete.json"
@@ -28,7 +29,9 @@ def save_json(path , dict):
 leaderboard_dict = load_json(leaderboard_path)
 obsolete_dict = load_json(obsolete_path)
 pending_dict = load_json(pending_path)
+submisson_channel_id = load_json(secret_path)["Submisson Channel id"]
 pending_id = pending_dict.get("counter", None)
+
 if pending_id is None:
     pending_id = 0
     pending_dict["counter"] = None
@@ -402,6 +405,7 @@ class RejectionGUI(Modal):
     async def on_submit(self, interaction: discord.Interaction):
         reason = self.children[0].value
         self.submission = pending_dict.pop(self.run_id, None)
+        await interaction.response.defer()
         try:
             if self.submission:
                 await dm_user(self.bot, self.submission["Runner id"],f"Fortunately, your submission to the {self.submission['Category']} leaderboards has been rejected for the reason: ***{reason}***.\n~~*(Feel free to cry if you believe this is wrong or unjustified)*~~")
@@ -415,7 +419,6 @@ class RejectionGUI(Modal):
                 save_json(pending_path, pending_dict)
             else:
                 print(f"submission {self.run_id} not found")
-            await interaction.response.defer()
             
         except Exception as e:
             pending_dict.append(self.submission)
