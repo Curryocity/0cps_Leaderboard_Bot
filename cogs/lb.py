@@ -444,8 +444,8 @@ class DeleteButton(View):
                     Button(label="Cancel", style=discord.ButtonStyle.gray, custom_id="Cancel")]
 
         async def button_callback(interaction: discord.Interaction):
-            if not(interaction.user.guild_permissions.administrator):
-                await interaction.response.send_message("What are you trying to do? :clown:")
+            if not(any(role.name in self.required_roles for role in interaction.user.roles)):
+                await interaction.response.send_message("What are you trying to do? :clown:", ephemeral=True)
                 return
             
             custom_id = interaction.data["custom_id"]

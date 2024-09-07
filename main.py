@@ -21,9 +21,10 @@ async def on_ready():
 
 @bot.command()
 @commands.is_owner()
-async def reload(ctx, extension):
-    await bot.reload_extension(f"cogs.{extension}")
-    await ctx.send(f"ReLoaded {extension} done.")
+async def say(ctx, *, message: str):
+    await ctx.message.delete()
+    await ctx.send(message)
+
 
 @bot.command()
 @commands.is_owner()
