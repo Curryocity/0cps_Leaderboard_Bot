@@ -15,6 +15,27 @@ Yes, you're right. We had successfully request [speedrun.com board](<https://www
 - more chat commands
 - some easter eggs : ) 
 
+## Leaderboard (briefly)
+
+### - Speedrun
+
+- Cross the island for specified mode with 0 cps bridging, you are only allowed to click during clutch and pillar. 
+- Sprint restriction( *tellyless%* Category ): You are not allowed to sprint between the period of last contact of island and the last block of bridge place.
+
+### - Distance
+
+- Only the horizontal distance(may be diagonal) is counted
+- Only use 0cps, reclicking resets the distance counter
+- Switching bridging method resets the distance counter
+
+### Enjoy the art of holding down right click !
+
+### More detailed rules would be added in Project Zero SV and Speedrun.com
+
 ## Credit
 
-This is not the first LB bot for Project Zero, the original creator of the bot - 8140 (or Vorizon on discord). It started that I had too much "suggestions" for the bot and 8140 kinda challenge me to make a better one myself. Ofc I wouldn't give up such great oppurtunity for learning purposes ~~and to secretly inject virus to everyone in the server~~. And thanks again to 8140 for helping me setting up the bot and code reference (I didn't copy most of them tho).
+This isn't the first LB bot for Project Zero, 8140 (or Vorizon on discord) had made the first one. 
+
+It started that I had too much "suggestions" for the bot so 8140 challenges me to make a better one myself. Ofc I wouldn't give up such great oppurtunity to both learn and making my desire bot ~~and to secretly inject virus to everyone in the server~~(jkjkjkjkjk!!)
+
+And thanks again to 8140 for helping me setting up the bot and some code reference.
