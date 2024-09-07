@@ -15,6 +15,9 @@ class ButtonView(View):
             self.button.press_count += 1
             self.button.label = f"Pressed {self.button.press_count} times"
             await interaction.response.edit_message(content=f"Button pressed {self.button.press_count} times", view=self)
+            if self.button.press_count == 69:
+                await interaction.followup.send("Noice~")
+            
 
         self.button.callback = button_callback
 
