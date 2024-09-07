@@ -75,7 +75,7 @@ class easter_egg(commands.Cog):
     async def todo(self,ctx):
         await ctx.send("to do list for Curryocity:\n"+
                        "- better todo command\n"+
-                       "- tie resolver\n"+
+                       "- encrypted chat\n"+
                        "- efficient code\n"
                        "- more server commands\n"
                        )
