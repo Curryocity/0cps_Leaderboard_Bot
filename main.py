@@ -21,12 +21,6 @@ async def on_ready():
 
 @bot.command()
 @commands.is_owner()
-async def reload(ctx, extension):
-    await bot.reload_extension(f"cogs.{extension}")
-    await ctx.send(f"ReLoaded {extension} done.")
-
-@bot.command()
-@commands.is_owner()
 async def restart(ctx, silient = False):
     if silient:
         print("Restarting myself...")

@@ -46,6 +46,12 @@ class casual(commands.Cog):
         self.bot = bot
 
     @commands.command()
+    @commands.is_owner()
+    async def say(ctx, *, message: str):
+        await ctx.message.delete()
+        await ctx.send(message)
+
+    @commands.command()
     async def click(self,ctx):
         view = ButtonView()
         await ctx.send("here is your button:", view=view)

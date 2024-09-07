@@ -81,53 +81,125 @@ class lb(commands.Cog):
                            "e.g.  ***!delete m2n ..***  means delete run from \"McPlayHD Short Tellyless%\"\n"+
                            "        ***!delete d4  ..***  means delete run from \"Distance Hold Diag Fruit\"")
         else:
-            param = param.lower()
-            tellyq = None
-            if param.endswith("y"):
-                tellyq = True
-                param = param.removesuffix("y")
-            elif param.endswith("n"):
-                tellyq = False
-                param = param.removesuffix("n")
-            tellyreq = ["m1","m2","m3","m4","b1","b2"]
-            category_map = {"m1":"McPlayHD Extra Short", "m2":"McPlayHD Short", "m3":"McPlayHD Normal", "m4":"McPlayHD Long", "m5":"McPlayHD Inclined Short", "m6":"McPlayHD Inclined Normal", "m7":"McPlayHD Onestack",
-                            "b1":"BridgerLand Short", "b2":"BridgerLand Regular", "b3":"BridgerLand Inclined",
-                            "d1":"Distance Cha Cha", "d2":"Distance HGB","d3":"Distance Dao Telly","d4":"Distance Hold Diag Fruit","d5":"Distance Lightning","d6":"Distance Kemytz Bridge","d7":"Distance Gain Cha Cha","d8":"Distance Hold Haka","d9":"Distance Hold Durx"}
-            if param in category_map:
-                category = category_map[param]
-                confirm_msg = f"{category}"
-                if (param in tellyreq) ^ (tellyq is None):
-                    if tellyq is True:
-                        confirm_msg += " Telly%"
-                    elif tellyq is False:
-                        confirm_msg += " Tellyless%"
-                else:
-                    await ctx.send("Invalid telly tag, !delete to check out the guide.")
-                    return
-                if runner_id is None:
-                    await ctx.send("Runner id?")
-                    return
-
-                runner_name = await get_user_name(self.bot, runner_id, f"I don't think there is runner with id  '{runner_id}'", ctx)
-                if runner_name is None:
-                    return
+            state, category, tellyq, full_name = category_interpreter(param, True)
                 
-                templb = load_json(leaderboard_path).get(category,None)
-                if templb is None:
-                    await ctx.send(f"{runner_name} does not have a run in {confirm_msg}")
+            if state == 1:
+                await ctx.send("Invalid category tag, !delete to check out the guide.")
+                return
+            if state == 2:
+                await ctx.send("Invalid telly tag, !delete to check out the guide.")
+                return
+            if runner_id is None:
+                await ctx.send("Runner id?")
+                return
+
+            runner_name = await get_user_name(self.bot, runner_id, f"I don't think there is runner with id  '{runner_id}'", ctx)
+            if runner_name is None:
+                return
+            
+            templb = load_json(leaderboard_path).get(category, None)
+            if templb is None:
+                await ctx.send(f"{runner_name} does not have a run in {full_name}")
+                return
+
+            for i, run in enumerate(templb):
+                if run["Runner id"] == int(runner_id):
+                    if tellyq is run.get("Telly?", None):
+                        content = f"Are you sure to delete {runner_name}'s run in {full_name} ?"
+                        await ctx.send(content, view = DeleteButton(category = category, index = i))
+                        return
+
+            await ctx.send(f"{runner_name} does not have a run in {full_name}")
+
+    @commands.command()
+    @commands.has_any_role('Admin','admin','Moderator','moderator')
+    async def tie(self, ctx, param = "", rank = None, order = None):
+        if param == "":
+            await ctx.send("## Welcome to tie resolver! \n ## Syntax: !tie <category tag> <rank> <order>\n"+
+                           "1. **m**:  McPlayHD,  **b**:  BridgerLand,  **d**:  Distance\n"+
+                           "2. **Digit** for sub-category. 1-10 (0 represent 10) matching the order of !lb options\n"+
+                           "3. Please put the rank as the number it appear on the lb, I am lazy to code more foolproof(it's mods' tool)\n"+
+                           "4. For n ties, order is an 1-n number sequence that determine the relative order according to current order\n"+
+                           "e.g.  ***!tie m2 2 321***  means fixing \"McPlayHD Short\" 2nd place ties(3 ties in total) by ordering them in reverse\n")
+        else:
+            state, category, tellyq, full_name = category_interpreter(param, False)
+            ties = []
+            
+            if state == 1:
+                await ctx.send("Invalid category tag, !tie to check out the guide.")
+                return
+            
+            templb = load_json(leaderboard_path).get(category, None)
+            if templb is None:
+                await ctx.send(f"There is no run in \"{category}\"")
+                return
+            
+            if rank is None:
+                await ctx.send("rank?")
+                return
+            try:
+                rank = int(rank)
+            except ValueError:
+                await ctx.send("Invalid rank")
+                return
+            
+            if (rank < 0) or (rank > len(templb)):
+                await ctx.send("rank out of bound")
+                return
+            if order is None:
+                await ctx.send("order?")
+                return
+
+            if "Distance" in category:
+                focus = "Distance"
+            else:
+                focus = "Time"
+
+                value = templb[rank-1][focus]
+                ties.append(templb[rank-1])
+                ties_amount = 1
+            
+            for i in range(0,len(templb)-rank):
+                if templb[rank+i][focus] != value:
+                    break
+                ties.append(templb[rank+i])
+                ties_amount += 1
+            
+            if ties_amount == 1:
+                await ctx.send(f"There is only a single run at rank: {rank}")
+                return
+            
+            if len(order) != ties_amount:
+                await ctx.send(f"order sequence length should be equal to the amount of ties: {ties_amount}")
+                return
+            
+            ordered_ties = [None] * len(ties)
+
+            for i,t in enumerate(order):
+                try:
+                    placement = int(t)-1
+                    if placement < 0:
+                        raise ValueError
+                    
+                    if ordered_ties[placement] is None:
+                        ordered_ties[placement] = ties[i]
+                    else:
+                        raise ValueError
+
+                except:
+                    await ctx.send(f"Error while iterating through ur 'order' sequence")
                     return
 
-                for i, run in enumerate(templb):
-                    if run["Runner id"] == int(runner_id):
-                        if tellyq is run.get("Telly?", None):
-                            confirm_msg = f"Are you sure to delete {runner_name}'s run in {confirm_msg} ?"
-                            await ctx.send(confirm_msg, view = DeleteButton(category = category, index = i))
-                            return
+            for i,t in enumerate(ordered_ties):
+                templb[rank-1+i] = t
+            global leaderboard_dict
+            leaderboard_dict = load_json(leaderboard_path)
+            leaderboard_dict[category] = templb
+            save_json(leaderboard_path, leaderboard_dict)
 
-                await ctx.send(f"{runner_name} does not have a run in {confirm_msg}")
-            else:
-                await ctx.send("Invalid category tag, !delete to check out the guide.")
+            await ctx.send("Reordered the ties successfully")
 
+                
 class InitialButton(View):
     def __init__(self, tag : str, selected = 0):
         super().__init__(timeout=None)
@@ -180,7 +252,7 @@ class CategorySelect(Select):
         options_dict = {
             "McPlayHD" : ["Extra Short", "Short", "Normal", "Long", "Inclined Short", "Inclined Normal", "Onestack"],
             "BridgerLand" : ["Short", "Regular", "Inclined"],
-            "Distance" : ["Cha Cha", "HGB", "Dao Telly", "Hold Diag Fruit", "Lightning", "Kemytz Bridge", "Gain Cha Cha", "Hold Haka", "Hold Durx"]
+            "Distance" : ["Cha Cha", "HGB", "Dao Telly", "Hold Diag Fruit", "Lightning", "Kemytz Bridge", "Gain Cha Cha", "Hold Space Haka", "Hold Durx"]
         }
         options = [discord.SelectOption(label = option) for option in options_dict[category]]
         super().__init__(placeholder = placeholder, options = options) # value is the label name by default
@@ -325,12 +397,11 @@ class VerificationView(View):
     @discord.ui.button(label="Verify", style=discord.ButtonStyle.green, custom_id='persistent_view:green')
     async def verify(self, interaction: discord.Interaction, button: discord.ui.Button):
 
-        
-        
         if not(any(role.name in self.required_roles for role in interaction.user.roles)):
             await interaction.response.send_message("What are you trying to do? :clown:", ephemeral=True)
             return
         
+        await interaction.response.defer()
         submission = pending_dict.pop(self.run_id, None)
         if submission:
             self.insertLB(submission["Category"], submission)
@@ -444,8 +515,8 @@ class DeleteButton(View):
                     Button(label="Cancel", style=discord.ButtonStyle.gray, custom_id="Cancel")]
 
         async def button_callback(interaction: discord.Interaction):
-            if not(interaction.user.guild_permissions.administrator):
-                await interaction.response.send_message("What are you trying to do? :clown:")
+            if not(any(role.name in self.required_roles for role in interaction.user.roles)):
+                await interaction.response.send_message("What are you trying to do? :clown:", ephemeral=True)
                 return
             
             custom_id = interaction.data["custom_id"]
@@ -540,6 +611,41 @@ async def send_submission(bot, run_id, value, tellyq, newq = True):
             pending_id += 1
             pending_dict.update({"counter":pending_id})
         save_json(pending_path , pending_dict)
+
+def category_interpreter(param: str, tellymatter: bool):
+    param = param.lower()
+    tellyq = None
+    state = 1
+    category, full_name = "", ""
+
+    if tellymatter:
+        if param.endswith("y"):
+            tellyq = True
+            param = param.removesuffix("y")
+        elif param.endswith("n"):
+            tellyq = False
+            param = param.removesuffix("n")
+
+        tellyreq = ["m1","m2","m3","m4","b1","b2"]
+
+    category_map = {"m1":"McPlayHD Extra Short", "m2":"McPlayHD Short", "m3":"McPlayHD Normal", "m4":"McPlayHD Long", "m5":"McPlayHD Inclined Short", "m6":"McPlayHD Inclined Normal", "m7":"McPlayHD Onestack",
+                    "b1":"BridgerLand Short", "b2":"BridgerLand Regular", "b3":"BridgerLand Inclined",
+                    "d1":"Distance Cha Cha", "d2":"Distance HGB","d3":"Distance Dao Telly","d4":"Distance Hold Diag Fruit","d5":"Distance Lightning","d6":"Distance Kemytz Bridge","d7":"Distance Gain Cha Cha","d8":"Distance Hold Space Haka","d9":"Distance Hold Durx"}
+    if param in category_map:
+        
+        category = category_map[param]
+        if tellymatter:
+            full_name = category
+            state = 2
+            if (param in tellyreq) ^ (tellyq is None):
+                if tellyq is True:
+                    full_name += " Telly%"
+                elif tellyq is False:
+                    full_name += " Tellyless%"
+                state = 0
+        else:
+            state = 0
+    return state, category, tellyq, full_name #state == 0 means success
 
 def is_link(link):
     link_regex = re.compile( r'^https?://')

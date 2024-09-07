@@ -34,6 +34,7 @@ class server(commands.Cog):
                        "- lb\n"+
                        "- submit\n"+
                        "- delete (Moderator or Admin only)\n"+
+                       "- tie (Moderator or Admin only)\n"+
                        "**Chat commands:** \n"+
                        "- click\n"+
                        "- cookie\n"+
