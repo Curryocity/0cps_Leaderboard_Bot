@@ -98,6 +98,10 @@ class easter_egg(commands.Cog):
             await message.channel.send("Bro you did that last night :skull: ")
         if message.content == "same" or message.content == "Same":
             await message.channel.send("same")
+        if message.content == "ello":
+            await message.channel.send("ello")
+        if message.content == "copycat":
+            await message.channel.send("copycat")
         if "nigger" in message.content.lower():
             await message.channel.send(f"N word detected, <@{message.author.id}> wert a shame!")
 
