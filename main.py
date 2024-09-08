@@ -2,7 +2,7 @@ import os
 import asyncio
 import discord
 import cogs.lb
-import cogs
+
 from cogs.lb import pending_path,submisson_channel_id
 from discord.ext import commands
 
