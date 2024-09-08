@@ -143,7 +143,7 @@ class lb(commands.Cog):
                 await ctx.send("Invalid rank")
                 return
             
-            if (rank < 0) or (rank > len(templb)):
+            if (rank < 1) or (rank > len(templb)):
                 await ctx.send("rank out of bound")
                 return
             if order is None:
@@ -155,9 +155,9 @@ class lb(commands.Cog):
             else:
                 focus = "Time"
 
-                value = templb[rank-1][focus]
-                ties.append(templb[rank-1])
-                ties_amount = 1
+            value = templb[rank-1][focus]
+            ties.append(templb[rank-1])
+            ties_amount = 1
             
             for i in range(0,len(templb)-rank):
                 if templb[rank+i][focus] != value:
@@ -166,7 +166,7 @@ class lb(commands.Cog):
                 ties_amount += 1
             
             if ties_amount == 1:
-                await ctx.send(f"There is only a single run at rank: {rank}")
+                await ctx.send(f"There is no tie at rank: {rank}")
                 return
             
             if len(order) != ties_amount:
@@ -185,7 +185,6 @@ class lb(commands.Cog):
                         ordered_ties[placement] = ties[i]
                     else:
                         raise ValueError
-
                 except:
                     await ctx.send(f"Error while iterating through ur 'order' sequence")
                     return
@@ -198,7 +197,6 @@ class lb(commands.Cog):
             save_json(leaderboard_path, leaderboard_dict)
 
             await ctx.send("Reordered the ties successfully")
-
                 
 class InitialButton(View):
     def __init__(self, tag : str, selected = 0):

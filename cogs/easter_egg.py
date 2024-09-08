@@ -17,13 +17,13 @@ class easter_egg(commands.Cog):
         elif r == 2:
             await ctx.send("Sorry, I didn’t quite get that.")
         elif r == 3:
-            await ctx.send("Hmm, I’m having trouble with that.")
+            await ctx.send("Hmm, I’m having trouble talking with you.")
         elif r == 4:
-            await ctx.send("Let me think... actually, I'm not sure.")
+            await ctx.send("Let me think... actually, I don't care.")
         elif r == 5:
             await ctx.send("I’m scratching my virtual head over here.")
         elif r == 6:
-            await ctx.send("That sounds like a question for a human.")
+            await ctx.send("Well, that sounds like a question for human.")
 
     @commands.command()
     async def wert(self,ctx):
@@ -75,9 +75,18 @@ class easter_egg(commands.Cog):
     async def todo(self,ctx):
         await ctx.send("to do list for Curryocity:\n"+
                        "- better todo command\n"+
-                       "- encrypted chat\n"+
+                       "- poll\n"+
                        "- efficient code\n"
                        "- more server commands\n"
+                       )
+        
+    @commands.command()
+    async def useless(self,ctx):
+        await ctx.send("If you think you're useless, look at these:\n"+
+                       "https://discord.com/channels/1224817276398735420/1237070688146292866 https://discord.com/channels/1224817276398735420/1237070847676780564\n"+
+                       "https://discord.com/channels/1224817276398735420/1237304439212343348 https://discord.com/channels/1224817276398735420/1237304488885358623\n"+
+                       "https://discord.com/channels/1224817276398735420/1237070654935793816 https://discord.com/channels/1224817276398735420/1237070807218524291\n"+
+                       ": D"
                        )
 
     @commands.command()

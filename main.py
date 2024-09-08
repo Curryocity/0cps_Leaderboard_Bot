@@ -76,9 +76,9 @@ class RestartButton(discord.ui.View):
     @discord.ui.button(label="Restart", style=discord.ButtonStyle.primary)
     async def restart_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         if interaction.user.guild_permissions.administrator:
-            await interaction.response.send_message("Ok", ephemeral=True)
+            await interaction.response.send_message("ok", ephemeral=True)
         else:
-            await interaction.response.send_message("You don't have permission to use this button.", ephemeral=True)
+            await interaction.response.send_message(":clown:", ephemeral=True)
             return
         self.counter += 1
         message = await self.ctx.fetch_message(self.message_id)

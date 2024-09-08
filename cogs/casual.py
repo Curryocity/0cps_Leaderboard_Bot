@@ -112,7 +112,8 @@ class casual(commands.Cog):
             "I ordered a chicken and an egg online. I’ll let you know what comes first.",
             "Q: What did one toilet say to another?\nA: You look flushed.",
             "Q: What does a baby computer call his father?\nA: Data!",
-            "Q: What kind of tea is hard to swallow?\nA: Realitea!"
+            "Q: What kind of tea is hard to swallow?\nA: Realitea!",
+            "Q: Why do French people eat snails?\nA: They don’t like fast food."
         ]
         j = random.choice(jokes)
         await ctx.send(j)
