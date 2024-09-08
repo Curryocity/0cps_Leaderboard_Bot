@@ -12,12 +12,18 @@ bot = commands.Bot(command_prefix="!", intents=discord.Intents.all(), help_comma
 
 @bot.event
 async def on_ready():
-    slash = await bot.tree.sync()
+    await cogs.lb.setup_hook(bot = bot)
     print(f"Logged in as --> {bot.user}")
     print("Bot is ready for dinner!")
-    print(f"Loaded {len(slash)} slash command(s)")
     print("---------------------------")
-    await cogs.lb.setup_hook(bot = bot)
+
+@bot.command()
+@commands.is_owner()
+async def sync(ctx):
+    await ctx.send("Syncing slashes...")
+    slash = await bot.tree.sync()
+    await ctx.send(f"Synced {len(slash)} slash command(s)")
+
 
 @bot.command()
 @commands.is_owner()

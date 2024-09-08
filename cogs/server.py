@@ -53,10 +53,6 @@ class server(commands.Cog):
     async def speedrun(self,ctx):
         await ctx.send("I am speeeeeeed ~~ :muscle: \nhttps://www.speedrun.com/0cps")
 
-    @commands.command()
-    async def easteregg(self,ctx):
-        await ctx.send("no")
-
 async def setup(bot):
     await bot.add_cog(server(bot))
 

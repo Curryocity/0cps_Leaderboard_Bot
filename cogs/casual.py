@@ -1,9 +1,14 @@
 import discord
 import random
 
+from cogs.lb import load_json
 from discord.ext import commands
 from discord import app_commands
 from discord.ui import Button, View
+from typing import Optional
+
+secret_path = "data/secret.json"
+poll_channel_id = load_json(secret_path)["Poll Channel id"]
 
 class ButtonView(View):
     def __init__(self):
@@ -122,6 +127,58 @@ class casual(commands.Cog):
     async def hello(self,ctx):
         await ctx.send("shut the fuck up no one cares about you")
 
+    @commands.command()
+    async def poll(self,ctx, *, args: str = ""):
+
+        if args == "":
+            await ctx.send("## Syntax: !poll <question> ,, <emojis:optional>\n"+
+                           "1. **,,** is the seperator of question and emoji\n"+
+                           "2. You don't have to type emoji if you want the default ones\n"+
+                           "3. Don't use **,,** for non-seperator or you might send a broken message\n"+
+                           "ex. !poll Do you want to marry me? ,, :white_check_mark: :x: :middle_finger:")
+            return
+        if ",," in args:
+            parts = args.split(",,", 1)
+            question = parts[0].strip()
+            emojis = parts[1].replace(" ", "")
+            if emojis == "":
+                await ctx.reply("Don't type **,,** if you don't enter emojis")
+                return
+        else:
+            emojis = None
+            question = args.strip()
+
+        embed = discord.Embed(title="poll",description = question, color= 0xa800e6)
+        embed.set_author(name= f"{ctx.author}#{ctx.author.discriminator}", icon_url = ctx.author.avatar.url)
+        channel = self.bot.get_channel(poll_channel_id)
+        if channel:
+            try:
+                poll_message = await channel.send(embed=embed)
+
+                if emojis is None:
+                    await poll_message.add_reaction('⬆️')
+                    await poll_message.add_reaction('⬇️')
+                    await poll_message.add_reaction('↕️')
+                else:
+                    emoji_counter = 0
+                    for emoji in emojis:
+                        try:
+                            await poll_message.add_reaction(emoji)
+                            emoji_counter += 1
+                        except discord.HTTPException:
+                            continue
+                    if emoji_counter < 2:
+                        await poll_message.delete()
+                        await ctx.reply("You are not giving enough options, need at least 2")
+                        return
+
+                await ctx.reply("Yes paul !")
+            except Exception as e:
+                print(e)
+                await poll_message.delete()
+                await ctx.reply("An error occured")
+        else:
+            await ctx.reply("error: poll channel wasn't setupped")
 
 async def setup(bot):
     await bot.add_cog(casual(bot))
