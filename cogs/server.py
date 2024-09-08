@@ -13,10 +13,10 @@ class server(commands.Cog):
 
     @commands.command()
     async def help(self,ctx):
-        await ctx.send("Leaderboard section\nhttps://discord.com/channels/1224817276398735420/1281806474754130023 for announcement\n"+
-                       "https://discord.com/channels/1224817276398735420/1281802864867414068 to get started\n"+
-                       "https://discord.com/channels/1224817276398735420/1281802527221874688 ain't reading allat\n"+
-                       "https://discord.com/channels/1224817276398735420/1281802906886209577 to learn useless informations\n"+
+        await ctx.send("Check out\n"+
+                       "https://discord.com/channels/1224817276398735420/1237071501073580114 server rule (not copypasta)\n"+
+                       "https://discord.com/channels/1224817276398735420/1281802527221874688 to get started\n"+
+                       "https://discord.com/channels/1224817276398735420/1281802906886209577 ain't reading allat\n"+
                        "https://discord.com/channels/1224817276398735420/1276982891531731070 if you got mental issues\n"+
                        "But who cares :nerd:\n"+
                        "**Most importantly, use '!command' to check out all of the commands**")
@@ -46,7 +46,7 @@ class server(commands.Cog):
 
     @commands.command()
     async def github(self,ctx):
-        await ctx.send(":blushed: You really want to see my inner source code?\n Sure! -> https://github.com/Curryocity/0cps_Leaderboard_Bot")
+        await ctx.send("You really want to see my source code? :blushed:\n Sure! -> https://github.com/Curryocity/0cps_Leaderboard_Bot")
 
     @commands.command()
     async def speedrun(self,ctx):

@@ -36,20 +36,13 @@ class easter_egg(commands.Cog):
     
     @commands.command()
     async def haka(self,ctx):
-        await ctx.send("Haka, an expert of naming. Has created several original finding and gave them some interesting names. Here are a list of few:\n"+
+        await ctx.send("Haka, an expert of naming. Let's see:\n"+
                         "- Haka start(hgb)\n"+
                         "- No setup haka start(hgb)\n"+
-                        "- wumimic start(hgb)\n"+
-                        "- Imit-Leap start(hgb)\n"+
-                        "- imitated jam start(hgb)\n"+
-                        "- martial start(hgb)\n"+
                         "- haka jitter 0 cps\n"+
-                        "- Haka bridge(honestly fine lol)\n"+
-                        "- Hakawalk")
-
-    @commands.command()
-    async def poop(self,ctx):
-        await ctx.send("I pooped here")
+                        "- Haka bridge\n"+
+                        "- Hakawalk"+
+                        "That's pretty interesting :thinking:")
     
     @commands.command()
     async def sigma(self, ctx, *, msg: str = ""):
@@ -98,8 +91,8 @@ class easter_egg(commands.Cog):
         await ctx.send(":curry:", file = discord.File('data/curryeee.txt'))
 
     @commands.command()
-    async def update(self,ctx):
-        await ctx.send("update your retarded brain first")
+    async def ping(self,ctx):
+        await ctx.send("Pinging the server...  please wait patiently")
 
     @commands.command()
     async def why(self,ctx):
@@ -114,8 +107,31 @@ class easter_egg(commands.Cog):
         await ctx.send("such as removing you from the server")
 
     @commands.command()
-    async def chatgpt(self,ctx):
-        await ctx.send("do I look like a chatgpt? :middle_finger:")
+    async def asian(self,ctx):
+        responses = [
+            "I will send you to jesus",
+            "Why do you have room temperature IQ",
+            "Don't do drugs, they're too expensive",
+            "Rolex good for my wrist",
+            "When I went to school, I walk 20 mile, uphill, both ways, 26 hours a day on 1 foot, my other foot was starting a business",
+            "Stoooobid",
+            "What da hail you say!",
+            "START A BUN--?? I'M THE CEO OF BEIJING CORN!!",
+            "Every morning I had to fight two lions",
+            "Hallo, I am a professional Asian dad specializing in Failure Management.",
+            "You will be a doctor.",
+            "Don't be a dick!",
+            "Can I have a discount?",
+            "Want to know what B stand for? B stand for Stoopid!",
+            "What's this? We're Asians, not Bsians!",
+            "You have time to breathe, but not time to study? Unbelievable!",
+            "Timmy learned calculus from the back of milk cartons.",
+            "Timmy learned to play Mozart from listening to the McDonalds jingle. Now he plays in his sleep.",
+            "See your neighbor, he got 15 years work experience; he's 9!",
+            "you look like a calculator"
+        ]
+        r = random.choice(responses)
+        await ctx.send(r)
 
     @commands.command()
     async def todo(self,ctx):
@@ -138,7 +154,7 @@ class easter_egg(commands.Cog):
         duration = datetime.timedelta(seconds=60)
         try:
             user = ctx.message.author
-            await user.timeout(duration, reason = "funny")
+            await user.timeout(duration)
         except Exception as e:
             print(e)
         await ctx.send("Sure, I'll mute you.")
@@ -151,13 +167,14 @@ class easter_egg(commands.Cog):
             await message.channel.send("Bro you did that last night :skull: ")
         if message.content == "same" or message.content == "Same":
             await message.channel.send("same")
-        if message.content == "ello":
-            await message.channel.send("ello")
         if message.content == "copycat":
             await message.channel.send("copycat")
         if "sigma" in message.content.lower() and not("!sigma" in message.content.lower()):
             await message.channel.send(f"ΣΣΣΣ ! <@{message.author.id}>!")
         if "nigger" in message.content.lower() and not("snigger" in message.content.lower()):
+            user = message.author
+            duration = datetime.timedelta(seconds=300)
+            await user.timeout(duration)
             await message.channel.send(f"N word detected, <@{message.author.id}> wert a shame!")
 
 async def setup(bot):

@@ -73,6 +73,39 @@ class casual(commands.Cog):
         await ctx.send("wtf that's my cookie!\ngo away!")
 
     @commands.command()
+    async def hello(self,ctx):
+        response = [
+        "*The room falls eerily quiet...*\n"
+        "*A faint breeze drifts by, carrying nothing but the sound of distant silence.*\n"
+        "*Even the crickets refuse to break the stillness. It's as if the very world holds its breath, waiting... but no reply comes.*"
+        ,
+        "*You shout into the void...*\n"
+        "*The sound echoes endlessly, bouncing off unseen walls of an infinite expanse.*\n"
+        "*Time itself seems to slow, each second dragging on for what feels like an eternity.*\n"
+        "*No birds chirp. No winds howl. Even the pixels on your screen seem to hesitate.*\n"
+        "*The universe pauses, as if contemplating whether to respond... but no one answers.*\n"
+        "*It’s just you... alone... with your thoughts.*"
+        ,
+        "*You call out...*\n"
+        "*The silence stretches on, deep and unbroken.*\n"
+        "*Not even a whisper of wind or the faintest rustle of leaves responds.*\n"
+        "*The world holds its breath, waiting... but no reply comes.*\n"
+        "*It’s just you, standing there, in a vast and empty silence.*"
+        ,
+         "*You speak, your words drifting into the air...*\n"
+        "*The quiet is deafening, as if the universe itself forgot how to respond.*\n"
+        "*No echo, no reaction — only the weight of your own presence in the void.*\n"
+        "*It's as though the world simply doesn’t care to acknowledge your call.*"
+        ,
+        "*You shout, but the sound is swallowed instantly.*\n"
+        "*Not a creature stirs, not a soul moves.*\n"
+        "*The stillness is oppressive, like time itself has stopped just to ignore you.*\n"
+        "*You wait... and wait... but the silence never ends.*"
+        ]
+        r = random.choice(response)
+        await ctx.send(r)
+
+    @commands.command()
     async def dice(self,ctx):
         num = random.randint(1,6)
         await ctx.send(f"u got {num}")
@@ -121,10 +154,6 @@ class casual(commands.Cog):
         ]
         j = random.choice(jokes)
         await ctx.send(j)
-
-    @commands.command()
-    async def hello(self,ctx):
-        await ctx.send("shut the fuck up no one cares about you")
 
     @commands.command()
     async def poll(self,ctx, *, args: str = ""):
