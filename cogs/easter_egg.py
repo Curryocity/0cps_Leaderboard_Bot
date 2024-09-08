@@ -161,11 +161,6 @@ class easter_egg(commands.Cog):
             await message.channel.send("copycat")
         if "sigma" in message.content.lower() and not("!sigma" in message.content.lower()):
             await message.channel.send(f"ΣΣΣΣ ! <@{message.author.id}>!")
-        if "nigger" in message.content.lower() and not("snigger" in message.content.lower()):
-            user = message.author
-            duration = datetime.timedelta(seconds=300)
-            await user.timeout(duration)
-            await message.channel.send(f"N word detected, <@{message.author.id}> wert a shame!")
 
 async def setup(bot):
     await bot.add_cog(easter_egg(bot))
