@@ -1,11 +1,10 @@
 import discord
 import random
 
-from cogs.lb import load_json
+from .lb import load_json
 from discord.ext import commands
-from discord import app_commands
 from discord.ui import Button, View
-from typing import Optional
+
 
 secret_path = "data/secret.json"
 poll_channel_id = load_json(secret_path)["Poll Channel id"]
