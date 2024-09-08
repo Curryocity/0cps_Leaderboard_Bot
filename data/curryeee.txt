@@ -12,10 +12,10 @@ Easter_egg?
 
 shimple cmd: siri, wert, haka, pie, e, curry, why, idea, asian, todo, mute
 
-keyword: f* you, same, copycat, N*(you will get mute), sigma
+keyword: f* you, same, copycat, sigma
 
-params cmd:
-1. sigma <many numbers>:
-ex. !sigma 2.5 42 1 7 ---> output: 52.5
-2. pi <many numbers>
-!sigma 2 3 5 ---> output: 30
+SIGMA
+
+!sigma <many numbers>: (x for multiply, space for add)
+ex. !sigma 6 4x5 2 1 1x2x3
+means 6 + 4x5 + 2 + 1 + 1x2x3 = 35
