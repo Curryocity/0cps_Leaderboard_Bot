@@ -12,12 +12,18 @@ bot = commands.Bot(command_prefix="!", intents=discord.Intents.all(), help_comma
 
 @bot.event
 async def on_ready():
-    slash = await bot.tree.sync()
+    await cogs.lb.setup_hook(bot = bot)
     print(f"Logged in as --> {bot.user}")
     print("Bot is ready for dinner!")
-    print(f"Loaded {len(slash)} slash command(s)")
     print("---------------------------")
-    await cogs.lb.setup_hook(bot = bot)
+
+@bot.command()
+@commands.is_owner()
+async def sync(ctx):
+    await ctx.send("Syncing slashes...")
+    slash = await bot.tree.sync()
+    await ctx.send(f"Synced {len(slash)} slash command(s)")
+
 
 @bot.command()
 @commands.is_owner()
@@ -76,9 +82,9 @@ class RestartButton(discord.ui.View):
     @discord.ui.button(label="Restart", style=discord.ButtonStyle.primary)
     async def restart_button(self, interaction: discord.Interaction, button: discord.ui.Button):
         if interaction.user.guild_permissions.administrator:
-            await interaction.response.send_message("Ok", ephemeral=True)
+            await interaction.response.send_message("ok", ephemeral=True)
         else:
-            await interaction.response.send_message("You don't have permission to use this button.", ephemeral=True)
+            await interaction.response.send_message(":clown:", ephemeral=True)
             return
         self.counter += 1
         message = await self.ctx.fetch_message(self.message_id)
