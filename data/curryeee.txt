@@ -10,12 +10,12 @@ oh is it the...
 
 Easter_egg?
 
-shimple cmd: siri, wert, haka, pie, e, curry, why, idea, asian, todo, mute
+shimple cmd: siri, wert, haka, pi, e, curry, why, idea, asian, todo, mute
 
 keyword: f* you, same, copycat, sigma
 
-SIGMA
+SIGMA (you can edit the message to update the command)
 
-!sigma <many numbers>: (x for multiply, space for add)
+!sigma <arguments>: (x for multiply, space for add)
 ex. !sigma 6 4x5 2 1 1x2x3
 means 6 + 4x5 + 2 + 1 + 1x2x3 = 35
