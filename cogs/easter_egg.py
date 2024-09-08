@@ -45,6 +45,10 @@ class easter_egg(commands.Cog):
     
     @commands.command()
     async def sigma(self, ctx, *, msg: str = ""):
+        
+        if msg == "":
+            await ctx.send(f"sigma can math")
+            return
 
         numbers = msg.split(" ")
         sum = 0
