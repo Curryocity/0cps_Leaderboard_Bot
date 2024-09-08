@@ -7,6 +7,7 @@ from discord.ext import commands
 class easter_egg(commands.Cog):
     def __init__(self,bot):
         self.bot = bot
+        self.response_cache = {}
 
     @commands.command()
     async def siri(self,ctx):
@@ -45,10 +46,19 @@ class easter_egg(commands.Cog):
     
     @commands.command()
     async def sigma(self, ctx, *, msg: str = ""):
-        
+
+        context = self.sigma_core(msg)
+        if ctx.message.id in self.response_cache:
+            bot_message = self.response_cache[ctx.message.id]
+            await bot_message.edit(content = context)
+        else:
+            bot_message = await ctx.send(context)
+            self.response_cache[ctx.message.id] = bot_message
+
+    def sigma_core(self,msg: str):
+
         if msg == "":
-            await ctx.send(f"sigma can math")
-            return
+            return "sigma can math"
 
         numbers = msg.split(" ")
         sum = 0
@@ -60,17 +70,16 @@ class easter_egg(commands.Cog):
                     n = num
                 sum += float(n)
         except:
-            await ctx.send("not sigma")
-            return
+            return "not sigma"
 
         if sum.is_integer():
             sum = int(sum)
         
-        await ctx.send(f"sigma is {sum}")
-
+        context = f"sigma is {sum}"
+        
+        return context
 
     def pie(self,msg: str):
-
         numbers = msg.split("x")
         product = 1
         try:
@@ -78,7 +87,6 @@ class easter_egg(commands.Cog):
                 product *= float(num)
         except:
             raise ValueError
-
         return product
         
     @commands.command()
@@ -140,6 +148,9 @@ class easter_egg(commands.Cog):
     async def todo(self,ctx):
         await ctx.send("to do list for Curryocity:\n"+
                        "- rest\n"+
+                       "- sigmoid(enhance sigma)\n"+
+                       "- wr\n"+
+                       "- complete sentence\n"+
                        "- blacklist system\n"
                        )
 
@@ -165,6 +176,13 @@ class easter_egg(commands.Cog):
             await message.channel.send("copycat")
         if "sigma" in message.content.lower() and not("!sigma" in message.content.lower()):
             await message.channel.send(f"ΣΣΣΣ ! <@{message.author.id}>!")
+    
+    @commands.Cog.listener()
+    async def on_message_edit(self, before, after):
+
+        if after.content.startswith("!sigma"):
+            new_ctx = await self.bot.get_context(after)
+            await self.bot.invoke(new_ctx)
 
 async def setup(bot):
     await bot.add_cog(easter_egg(bot))
