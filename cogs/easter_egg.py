@@ -3,7 +3,6 @@ import discord
 import random
 
 from discord.ext import commands
-from discord.ui import Button, View
 
 class easter_egg(commands.Cog):
     def __init__(self,bot):
@@ -41,7 +40,7 @@ class easter_egg(commands.Cog):
                         "- No setup haka start(hgb)\n"+
                         "- haka jitter 0 cps\n"+
                         "- Haka bridge\n"+
-                        "- Hakawalk"+
+                        "- Hakawalk\n"+
                         "That's pretty interesting :thinking:")
     
     @commands.command()
@@ -138,15 +137,6 @@ class easter_egg(commands.Cog):
         await ctx.send("to do list for Curryocity:\n"+
                        "- rest\n"+
                        "- blacklist system\n"
-                       )
-        
-    @commands.command()
-    async def useless(self,ctx):
-        await ctx.send("If you think you're useless, look at these:\n"+
-                       "https://discord.com/channels/1224817276398735420/1237070688146292866 https://discord.com/channels/1224817276398735420/1237070847676780564\n"+
-                       "https://discord.com/channels/1224817276398735420/1237304439212343348 https://discord.com/channels/1224817276398735420/1237304488885358623\n"+
-                       "https://discord.com/channels/1224817276398735420/1237070654935793816 https://discord.com/channels/1224817276398735420/1237070807218524291\n"+
-                       ": D"
                        )
 
     @commands.command()
