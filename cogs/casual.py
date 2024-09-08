@@ -200,7 +200,7 @@ class casual(commands.Cog):
                         await ctx.reply("You are not giving enough options, need at least 2")
                         return
 
-                await ctx.reply("Yes paul !")
+                await ctx.reply("Greenfully made poll!")
             except Exception as e:
                 print(e)
                 await poll_message.delete()
