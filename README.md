@@ -30,7 +30,7 @@ Yes, you're right. We had successfully request [speedrun.com board](<https://www
 
 ### Enjoy the art of holding down right click !
 
-### More detailed rules would be added in Project Zero SV and Speedrun.com
+### More detailed rules in Project Zero SV and Speedrun.com
 
 ## Credit
 
