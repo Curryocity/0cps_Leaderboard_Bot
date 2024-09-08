@@ -1,0 +1,21 @@
+what is this?
+
+   　 ＿　∩   (??)
+　　ﾚﾍヽ| |
+　　　(・ｘ・)
+　　 c( uu}     ... ᘛ⁐̤ᕐᐷ
+
+
+oh it is the...
+
+Easter_egg:
+
+shimple cmd: siri, wert, haka, poop, pie, e, curry, update, why, idea, chatgpt, todo, useless, mute
+
+keyword: fuck you, same, ello, copycat, <N word>, sigma
+
+params cmd:
+1. sigma <many numbers>:
+ex. !sigma 2.5 42 1 7 ---> output: 52.5
+2. pi <many numbers>
+!sigma 2 3 5 ---> output: 30
