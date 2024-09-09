@@ -54,9 +54,14 @@ class casual(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def say(self, ctx, *, message: str):
+    async def say(self, ctx, *, msg: str):
+        if ctx.message.reference:  
+            replied_message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+            await replied_message.reply(msg)
+        else:
+            await ctx.send(msg)
         await ctx.message.delete()
-        await ctx.send(message)
+        
 
     @commands.command()
     @commands.is_owner()
