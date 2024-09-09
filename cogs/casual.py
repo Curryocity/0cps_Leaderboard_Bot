@@ -88,6 +88,7 @@ class casual(commands.Cog):
 
         embed = discord.Embed(title = title, description = content, color= 0xa800e6)
         embed.set_author(name= f"{ctx.author}#{ctx.author.discriminator}", icon_url = ctx.author.avatar.url)
+        await ctx.message.delete()
         await ctx.send(embed=embed)
 
 
