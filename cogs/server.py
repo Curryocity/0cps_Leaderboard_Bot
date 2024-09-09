@@ -38,6 +38,7 @@ class server(commands.Cog):
                        "- click\n"+
                        "- cookie\n"+
                        "- dice\n"+
+                       "- embed\n"+
                        "- hello\n"+
                        "- joke\n"+
                        "- music\n"+

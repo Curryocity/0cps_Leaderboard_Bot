@@ -59,6 +59,39 @@ class casual(commands.Cog):
         await ctx.send(message)
 
     @commands.command()
+    @commands.is_owner()
+    async def d(self, ctx, *, msg: str = ""):
+        if ctx.message.reference:  
+            replied_message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+            if replied_message.author == self.bot.user:
+                if msg == "":
+                    await replied_message.delete()
+                else:
+                    await replied_message.edit(content = msg)
+        await ctx.message.delete()
+
+    @commands.command()
+    async def embed(self, ctx, *, args: str = ""):
+        if args == "":
+            await ctx.send("## !embed <content> <,, title: optional>\n")
+            return
+        if ",," in args:
+            parts = args.split(",,", 1)
+            content = parts[0].strip()
+            title = parts[1].replace(" ", "")
+            if title == "":
+                await ctx.reply("Don't type **,,** if you are not entering the title")
+                return
+        else:
+            title = None
+            content = args.strip()
+
+        embed = discord.Embed(title = title, description = content, color= 0xa800e6)
+        embed.set_author(name= f"{ctx.author}#{ctx.author.discriminator}", icon_url = ctx.author.avatar.url)
+        await ctx.send(embed=embed)
+
+
+    @commands.command()
     async def click(self,ctx):
         view = ButtonView()
         await ctx.send("here is your button:", view=view)
