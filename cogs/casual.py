@@ -78,7 +78,7 @@ class casual(commands.Cog):
         if ",," in args:
             parts = args.split(",,", 1)
             content = parts[0].strip()
-            title = parts[1].replace(" ", "")
+            title = parts[1].strip()
             if title == "":
                 await ctx.reply("Don't type **,,** if you are not entering the title")
                 return
