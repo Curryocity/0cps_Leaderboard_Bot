@@ -32,17 +32,9 @@ class server(commands.Cog):
                        "**Leaderboard commands:**\n"+
                        "- lb\n"+
                        "- submit\n"+
-                       "- delete (Moderator or Admin only)\n"+
-                       "- tie (Moderator or Admin only)\n"+
-                       "**Chat commands:** \n"+
-                       "- click\n"+
-                       "- cookie\n"+
-                       "- dice\n"+
-                       "- embed\n"+
-                       "- hello\n"+
-                       "- joke\n"+
-                       "- music\n"+
-                       "- needfriend\n"+
+                       "- delete & tie (Moderator or Admin only)\n"+
+                       "**Misc commands:**\n"+
+                       "- click, cookie, dice, embed, hello, joke, music, needfriend\n"+
                        "***There is actually a lot more easter eggs not listed here hehe***")
 
     @commands.command()
