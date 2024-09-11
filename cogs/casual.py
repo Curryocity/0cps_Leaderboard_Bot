@@ -65,7 +65,7 @@ class casual(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def d(self, ctx, *, msg: str = ""):
+    async def edit(self, ctx, *, msg: str = ""):
         if ctx.message.reference:  
             replied_message = await ctx.channel.fetch_message(ctx.message.reference.message_id)
             if replied_message.author == self.bot.user:

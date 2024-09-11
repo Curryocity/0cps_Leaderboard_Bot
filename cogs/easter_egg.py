@@ -88,14 +88,6 @@ class easter_egg(commands.Cog):
         except:
             raise ValueError
         return product
-        
-    @commands.command()
-    async def pi(self,ctx):
-        await ctx.send("π = 3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196442881097566593344612847564823378678316527120190914564856692346034861045432664821339360726024914127372458700660631558817488152092096282925409171536436789259036001133053054882046652138414695194151160943305727036575959195309218611738193261179310511854807446237996274956735188575272489122793818301194912983367336244065664308602139494639522473719070217986094370277053921717629317675238467481846766940513200056812714526356082778577134275778960917363717872146844090122495343014654958537105079227968925892354201995611212902196086403441815981362977477130996051870721134999999...")
-
-    @commands.command()
-    async def e(self,ctx):
-        await ctx.send("e = 2.7182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274274663919320030599218174135966290435729003342952605956307381323286279434907632338298807531952510190115738341879307021540891499348841675092447614606680822648001684774118537423454424371075390777449920695517027618386062613313845830007520449338265602976067371132007093287091274437470472306969...")
 
     @commands.command()
     async def curry(self,ctx):
@@ -151,7 +143,10 @@ class easter_egg(commands.Cog):
                        "- sigmoid(enhance sigma)\n"+
                        "- wr\n"+
                        "- complete sentence\n"+
-                       "- blacklist system\n"
+                       "- blacklist system\n"+
+                       "- I made the !poll feature already btw, but the channel has to be setup by staff to use it\n"+
+                       "- you could tell curry if you got interesting ideas\n"+
+                       "- but curry is working on another project so likely he wouldn't update for a while\n"
                        )
 
     @commands.command()
@@ -169,7 +164,7 @@ class easter_egg(commands.Cog):
         if message.author == self.bot.user:
             return
         if message.content == "fuck you":
-            await message.channel.send("Bro you did that last night :skull: ")
+            await message.reply("Bro you did that last night :skull: ")
         if message.content == "same" or message.content == "Same":
             await message.channel.send("same")
         if message.content == "copycat":
